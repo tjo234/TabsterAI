@@ -110,8 +110,7 @@ export default function TabViewer() {
   // Add to playlist mutation
   const addToPlaylistMutation = useMutation({
     mutationFn: async (playlistId: number) => {
-      const response = await apiRequest("POST", "/api/playlist-items", { 
-        playlistId, 
+      const response = await apiRequest("POST", `/api/playlists/${playlistId}/items`, { 
         tabId 
       });
       if (!response.ok) {
