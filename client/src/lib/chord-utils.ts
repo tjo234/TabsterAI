@@ -90,11 +90,20 @@ export function detectChords(text: string): { chord: string; position: number }[
     const isFretboardLine = /^[-\|]{5,}/.test(line.trim());
     
     if (!isTablatureLine && !isStringTuning && !isFretboardLine) {
+      // Debug specific problematic line
+      if (line.includes('C#')) {
+        console.log('Line with C#:', JSON.stringify(line));
+        console.log('Regex pattern:', CHORD_PATTERN.source);
+      }
+      
       // Only detect chords in lyrics/chord lines using shared pattern
       let lineMatch;
       const linePattern = new RegExp(CHORD_PATTERN.source, 'g');
       
       while ((lineMatch = linePattern.exec(line)) !== null) {
+        if (line.includes('C#')) {
+          console.log('Match found:', JSON.stringify(lineMatch[0]), 'captured:', JSON.stringify(lineMatch[1]));
+        }
         matches.push({
           chord: lineMatch[1],
           position: currentPosition + lineMatch.index
