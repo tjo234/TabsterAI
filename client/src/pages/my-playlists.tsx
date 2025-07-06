@@ -79,7 +79,7 @@ export default function MyPlaylists() {
   });
 
   const createMutation = useMutation({
-    mutationFn: async (playlistData: { name: string; description: string }) => {
+    mutationFn: async (playlistData: { title: string; description: string }) => {
       const response = await apiRequest("POST", "/api/playlists", playlistData);
       return response.json();
     },
@@ -112,7 +112,7 @@ export default function MyPlaylists() {
       return;
     }
     createMutation.mutate({
-      name: newPlaylistName.trim(),
+      title: newPlaylistName.trim(),
       description: newPlaylistDescription.trim(),
     });
   };
@@ -156,7 +156,10 @@ export default function MyPlaylists() {
                 Create New Playlist
               </Button>
             </DialogTrigger>
-            <DialogContent className="bg-dark-secondary border-dark-tertiary">
+            <DialogContent 
+              className="bg-dark-secondary border-dark-tertiary" 
+              style={{ backgroundColor: 'hsl(0, 0%, 16.5%)', backdropFilter: 'blur(8px)' }}
+            >
               <DialogHeader>
                 <DialogTitle className="text-white">Create New Playlist</DialogTitle>
                 <DialogDescription className="text-gray-400">
