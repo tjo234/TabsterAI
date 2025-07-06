@@ -126,6 +126,7 @@ Tabster is a full-stack web application for creating, managing, and sharing guit
 - **July 06, 2025** - Added header navigation to My Tabs and My Playlists pages for consistent navigation across all pages.
 - **July 06, 2025** - Created admin-only Settings panel with role-based access control. Added isAdmin field to user schema, moved "Export All" and "Create Tab" buttons from Dashboard to Settings page for admin users only.
 - **July 06, 2025** - Implemented complete "Add to Playlist" functionality with dialog selection, proper error handling, and success notifications. Added standardized toast utilities (toastSuccess, toastError, toastUnauthorized) for consistent messaging across all pages with green success styling and error handling.
+- **July 06, 2025** - Fixed favorite button race condition issues by preventing multiple concurrent mutations and adding proper loading state management. Updated all toast messages to use standardized utilities for consistent UI feedback.
 
 ## User Preferences
 
