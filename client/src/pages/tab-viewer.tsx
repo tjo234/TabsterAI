@@ -8,7 +8,7 @@ import { apiRequest, queryClient } from "@/lib/queryClient";
 import Header from "@/components/layout/header";
 import TabViewerComponent from "@/components/tab/tab-viewer-component";
 import { generateTabPDF } from "@/lib/pdf-export";
-import type { TabWithUser } from "@shared/schema";
+import type { TabWithUser, Playlist } from "@shared/schema";
 
 export default function TabViewer() {
   const [, params] = useRoute("/tab/:id");
@@ -28,6 +28,13 @@ export default function TabViewer() {
   const { data: favoriteStatus } = useQuery<{ isFavorited: boolean }>({
     queryKey: [`/api/favorites/${tabId}/check`],
     enabled: isAuthenticated && !!tabId,
+    retry: false,
+  });
+
+  // Get user's playlists (only if authenticated)
+  const { data: playlists = [] } = useQuery<Playlist[]>({
+    queryKey: ["/api/playlists"],
+    enabled: isAuthenticated,
     retry: false,
   });
 
@@ -99,6 +106,54 @@ export default function TabViewer() {
       });
     },
   });
+
+  // Add to playlist mutation
+  const addToPlaylistMutation = useMutation({
+    mutationFn: async (playlistId: number) => {
+      const response = await apiRequest("POST", "/api/playlist-items", { 
+        playlistId, 
+        tabId 
+      });
+      return response.json();
+    },
+    onSuccess: () => {
+      toast({
+        title: "Success",
+        description: "Tab added to playlist!",
+      });
+      queryClient.invalidateQueries({ queryKey: ["/api/playlists"] });
+    },
+    onError: (error) => {
+      if (isUnauthorizedError(error)) {
+        toast({
+          title: "Unauthorized",
+          description: "You are logged out. Logging in again...",
+          variant: "destructive",
+        });
+        setTimeout(() => {
+          window.location.href = "/api/login";
+        }, 500);
+        return;
+      }
+      toast({
+        title: "Error",
+        description: "Failed to add tab to playlist. Please try again.",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const handleAddToPlaylist = (playlistId: number) => {
+    if (!isAuthenticated) {
+      toast({
+        title: "Sign in required",
+        description: "Please sign in to add tabs to playlists.",
+        variant: "destructive",
+      });
+      return;
+    }
+    addToPlaylistMutation.mutate(playlistId);
+  };
 
   const handleToggleFavorite = () => {
     if (!isAuthenticated) {
@@ -190,6 +245,9 @@ export default function TabViewer() {
         onEdit={handleEdit}
         onBack={() => navigate("/")}
         favoriteMutationLoading={addFavoriteMutation.isPending || removeFavoriteMutation.isPending}
+        playlists={playlists || []}
+        onAddToPlaylist={handleAddToPlaylist}
+        addToPlaylistLoading={addToPlaylistMutation.isPending}
       />
     </div>
   );

@@ -2,6 +2,14 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { 
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { 
   ArrowLeft, 
   Heart, 
   Plus, 
@@ -10,7 +18,7 @@ import {
   Play,
   Loader2
 } from "lucide-react";
-import type { TabWithUser } from "@shared/schema";
+import type { TabWithUser, Playlist } from "@shared/schema";
 
 interface TabViewerComponentProps {
   tab: TabWithUser;
@@ -21,6 +29,9 @@ interface TabViewerComponentProps {
   onEdit: () => void;
   onBack: () => void;
   favoriteMutationLoading: boolean;
+  playlists: Playlist[];
+  onAddToPlaylist: (playlistId: number) => void;
+  addToPlaylistLoading: boolean;
 }
 
 export default function TabViewerComponent({
@@ -32,6 +43,9 @@ export default function TabViewerComponent({
   onEdit,
   onBack,
   favoriteMutationLoading,
+  playlists,
+  onAddToPlaylist,
+  addToPlaylistLoading,
 }: TabViewerComponentProps) {
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty.toLowerCase()) {
@@ -94,13 +108,55 @@ export default function TabViewerComponent({
               </Button>
             )}
             {isAuthenticated && (
-              <Button 
-                variant="outline"
-                className="bg-dark-tertiary hover:bg-dark-quaternary text-white border-dark-quaternary"
-              >
-                <Plus className="w-4 h-4 mr-2" />
-                Add to Playlist
-              </Button>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button 
+                    variant="outline"
+                    className="bg-dark-tertiary hover:bg-dark-quaternary text-white border-dark-quaternary"
+                  >
+                    <Plus className="w-4 h-4 mr-2" />
+                    Add to Playlist
+                  </Button>
+                </DialogTrigger>
+                <DialogContent 
+                  className="bg-dark-secondary border-dark-tertiary" 
+                  style={{ backgroundColor: 'hsl(0, 0%, 16.5%)', backdropFilter: 'blur(8px)' }}
+                >
+                  <DialogHeader>
+                    <DialogTitle className="text-white">Add to Playlist</DialogTitle>
+                    <DialogDescription className="text-gray-400">
+                      Choose a playlist to add "{tab.title}" to.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <div className="space-y-4">
+                    {playlists.length === 0 ? (
+                      <p className="text-gray-400 text-center py-4">
+                        No playlists found. Create a playlist first to add tabs.
+                      </p>
+                    ) : (
+                      playlists.map((playlist) => (
+                        <Button
+                          key={playlist.id}
+                          variant="outline"
+                          className="w-full justify-start bg-dark-tertiary hover:bg-dark-quaternary text-white border-dark-quaternary"
+                          onClick={() => onAddToPlaylist(playlist.id)}
+                          disabled={addToPlaylistLoading}
+                        >
+                          {addToPlaylistLoading ? (
+                            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                          ) : (
+                            <Plus className="w-4 h-4 mr-2" />
+                          )}
+                          {playlist.title}
+                          {playlist.description && (
+                            <span className="text-gray-400 ml-2">- {playlist.description}</span>
+                          )}
+                        </Button>
+                      ))
+                    )}
+                  </div>
+                </DialogContent>
+              </Dialog>
             )}
             {canEdit && (
               <Button 
