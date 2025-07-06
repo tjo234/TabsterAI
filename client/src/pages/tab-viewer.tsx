@@ -46,31 +46,20 @@ export default function TabViewer() {
       return response.json();
     },
     onSuccess: () => {
-      toast({
-        title: "Success",
-        description: "Added to favorites!",
-      });
+      toastSuccess("Added to favorites!");
       queryClient.invalidateQueries({ queryKey: [`/api/favorites/${tabId}/check`] });
       queryClient.invalidateQueries({ queryKey: ["/api/favorites"] });
       queryClient.invalidateQueries({ queryKey: ["/api/stats"] });
     },
     onError: (error) => {
       if (isUnauthorizedError(error)) {
-        toast({
-          title: "Unauthorized",
-          description: "You are logged out. Logging in again...",
-          variant: "destructive",
-        });
+        toastUnauthorized();
         setTimeout(() => {
           window.location.href = "/api/login";
         }, 500);
         return;
       }
-      toast({
-        title: "Error",
-        description: "Failed to add favorite. Please try again.",
-        variant: "destructive",
-      });
+      toastError("Failed to add favorite. Please try again.");
     },
   });
 
@@ -80,31 +69,20 @@ export default function TabViewer() {
       return response.json();
     },
     onSuccess: () => {
-      toast({
-        title: "Success",
-        description: "Removed from favorites!",
-      });
+      toastSuccess("Removed from favorites!");
       queryClient.invalidateQueries({ queryKey: [`/api/favorites/${tabId}/check`] });
       queryClient.invalidateQueries({ queryKey: ["/api/favorites"] });
       queryClient.invalidateQueries({ queryKey: ["/api/stats"] });
     },
     onError: (error) => {
       if (isUnauthorizedError(error)) {
-        toast({
-          title: "Unauthorized",
-          description: "You are logged out. Logging in again...",
-          variant: "destructive",
-        });
+        toastUnauthorized();
         setTimeout(() => {
           window.location.href = "/api/login";
         }, 500);
         return;
       }
-      toast({
-        title: "Error",
-        description: "Failed to remove favorite. Please try again.",
-        variant: "destructive",
-      });
+      toastError("Failed to remove favorite. Please try again.");
     },
   });
 
@@ -159,11 +137,12 @@ export default function TabViewer() {
 
   const handleToggleFavorite = () => {
     if (!isAuthenticated) {
-      toast({
-        title: "Sign in required",
-        description: "Please sign in to favorite tabs.",
-        variant: "destructive",
-      });
+      toastError("Please sign in to favorite tabs.");
+      return;
+    }
+
+    // Prevent multiple concurrent mutations
+    if (addFavoriteMutation.isPending || removeFavoriteMutation.isPending) {
       return;
     }
 
