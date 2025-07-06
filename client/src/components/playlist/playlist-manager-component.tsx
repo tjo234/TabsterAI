@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -12,9 +13,14 @@ import {
   List,
   Play,
   Trash2,
-  Loader2
+  Loader2,
+  Plus,
+  Music
 } from "lucide-react";
-import type { PlaylistWithItems } from "@shared/schema";
+import { apiRequest, queryClient } from "@/lib/queryClient";
+import { useToast } from "@/hooks/use-toast";
+import { isUnauthorizedError } from "@/lib/authUtils";
+import type { PlaylistWithItems, TabWithUser } from "@shared/schema";
 
 interface PlaylistManagerComponentProps {
   playlist: PlaylistWithItems;
@@ -36,6 +42,58 @@ export default function PlaylistManagerComponent({
   isLoading,
 }: PlaylistManagerComponentProps) {
   const [searchQuery, setSearchQuery] = useState("");
+  const [showSearchResults, setShowSearchResults] = useState(false);
+  const { toast } = useToast();
+  
+  // Search tabs query
+  const { data: searchResults, isLoading: searchLoading } = useQuery<TabWithUser[]>({
+    queryKey: ["/api/search/tabs", searchQuery],
+    enabled: searchQuery.length > 0,
+    queryFn: async () => {
+      const response = await fetch(`/api/search/tabs?q=${encodeURIComponent(searchQuery)}`);
+      if (!response.ok) throw new Error('Search failed');
+      return response.json();
+    },
+  });
+
+  // Add tab to playlist mutation
+  const addTabMutation = useMutation({
+    mutationFn: async (tabId: number) => {
+      const response = await apiRequest("POST", `/api/playlists/${playlist.id}/items`, { 
+        tabId
+      });
+      return response.json();
+    },
+    onSuccess: () => {
+      toast({
+        title: "Success",
+        description: "Tab added to playlist!",
+        className: "bg-green-600 border-green-500"
+      });
+      queryClient.invalidateQueries({ queryKey: [`/api/playlists/${playlist.id}`] });
+      queryClient.invalidateQueries({ queryKey: ["/api/playlists"] });
+      setSearchQuery("");
+      setShowSearchResults(false);
+    },
+    onError: (error) => {
+      if (isUnauthorizedError(error)) {
+        toast({
+          title: "Unauthorized",
+          description: "You are logged out. Logging in again...",
+          variant: "destructive",
+        });
+        setTimeout(() => {
+          window.location.href = "/api/login";
+        }, 500);
+        return;
+      }
+      toast({
+        title: "Error",
+        description: "Failed to add tab to playlist. Tab may already be in the playlist.",
+        variant: "destructive",
+      });
+    },
+  });
 
   const formatDate = (date: Date | null) => {
     if (!date) return "Unknown";
@@ -69,6 +127,26 @@ export default function PlaylistManagerComponent({
   };
 
   const sortedItems = playlist.items.sort((a, b) => a.order - b.order);
+
+  const handleSearch = () => {
+    if (searchQuery.trim()) {
+      setShowSearchResults(true);
+    }
+  };
+
+  const handleAddTab = (tabId: number) => {
+    // Check if tab is already in playlist
+    const isAlreadyInPlaylist = playlist.items.some(item => item.tab.id === tabId);
+    if (isAlreadyInPlaylist) {
+      toast({
+        title: "Already Added",
+        description: "This tab is already in the playlist.",
+        variant: "destructive",
+      });
+      return;
+    }
+    addTabMutation.mutate(tabId);
+  };
 
   const handleReorder = (startIndex: number, endIndex: number) => {
     const items = [...sortedItems];
@@ -217,20 +295,101 @@ export default function PlaylistManagerComponent({
             <CardTitle className="text-lg font-semibold text-white">Add Tabs to Playlist</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="flex space-x-4">
-              <div className="flex-1">
-                <Input
-                  type="text"
-                  placeholder="Search your tabs or browse library..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="bg-dark-tertiary border-dark-quaternary text-white placeholder-gray-500 focus:border-tabster-orange"
-                />
+            <div className="space-y-4">
+              <div className="flex space-x-4">
+                <div className="flex-1">
+                  <Input
+                    type="text"
+                    placeholder="Search your tabs or browse library..."
+                    value={searchQuery}
+                    onChange={(e) => {
+                      setSearchQuery(e.target.value);
+                      if (e.target.value.trim()) {
+                        setShowSearchResults(true);
+                      } else {
+                        setShowSearchResults(false);
+                      }
+                    }}
+                    onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+                    className="bg-dark-tertiary border-dark-quaternary text-white placeholder-gray-500 focus:border-tabster-orange"
+                  />
+                </div>
+                <Button 
+                  onClick={handleSearch}
+                  disabled={!searchQuery.trim() || searchLoading}
+                  className="bg-tabster-orange hover:bg-orange-600 text-white px-6"
+                >
+                  {searchLoading ? (
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  ) : (
+                    <Search className="w-4 h-4 mr-2" />
+                  )}
+                  Search
+                </Button>
               </div>
-              <Button className="bg-tabster-orange hover:bg-orange-600 text-white px-6">
-                <Search className="w-4 h-4 mr-2" />
-                Search
-              </Button>
+
+              {/* Search Results */}
+              {showSearchResults && searchQuery.trim() && (
+                <div className="space-y-2">
+                  {searchLoading ? (
+                    <div className="text-center py-4">
+                      <Loader2 className="w-6 h-6 animate-spin mx-auto text-gray-400" />
+                      <p className="text-gray-400 mt-2">Searching tabs...</p>
+                    </div>
+                  ) : searchResults && searchResults.length > 0 ? (
+                    <div className="space-y-2 max-h-80 overflow-y-auto">
+                      <h4 className="text-sm font-medium text-gray-300">Search Results ({searchResults.length})</h4>
+                      {searchResults.map((tab) => {
+                        const isAlreadyInPlaylist = playlist.items.some(item => item.tab.id === tab.id);
+                        return (
+                          <div key={tab.id} className="flex items-center justify-between p-3 bg-dark-tertiary rounded-lg border border-dark-quaternary">
+                            <div className="flex items-center space-x-3">
+                              <div className="w-8 h-8 bg-blue-500/20 rounded flex items-center justify-center">
+                                <Music className="w-4 h-4 text-blue-400" />
+                              </div>
+                              <div>
+                                <h5 className="text-white font-medium">{tab.title}</h5>
+                                <p className="text-gray-400 text-sm">
+                                  {tab.artist} • 
+                                  <span className={`ml-1 ${getDifficultyColor(tab.difficulty)}`}>
+                                    {tab.difficulty}
+                                  </span>
+                                </p>
+                              </div>
+                            </div>
+                            <Button
+                              onClick={() => handleAddTab(tab.id)}
+                              disabled={isAlreadyInPlaylist || addTabMutation.isPending}
+                              size="sm"
+                              className={
+                                isAlreadyInPlaylist 
+                                  ? "bg-gray-600 text-gray-400 cursor-not-allowed" 
+                                  : "bg-tabster-orange hover:bg-orange-600 text-white"
+                              }
+                            >
+                              {addTabMutation.isPending ? (
+                                <Loader2 className="w-3 h-3 animate-spin" />
+                              ) : isAlreadyInPlaylist ? (
+                                "Already Added"
+                              ) : (
+                                <>
+                                  <Plus className="w-3 h-3 mr-1" />
+                                  Add
+                                </>
+                              )}
+                            </Button>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  ) : (
+                    <div className="text-center py-4">
+                      <Music className="w-8 h-8 text-gray-500 mx-auto mb-2" />
+                      <p className="text-gray-400">No tabs found for "{searchQuery}"</p>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           </CardContent>
         </Card>

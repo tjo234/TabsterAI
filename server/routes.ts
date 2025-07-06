@@ -223,7 +223,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       // Get current playlist items to calculate order
       const existingItems = await storage.getPlaylistItems(playlistId);
-      const order = existingItems.length;
+      const order = existingItems.length + 1;
       
       const itemData = insertPlaylistItemSchema.parse({ ...req.body, playlistId, order });
       const item = await storage.addTabToPlaylist(itemData);
