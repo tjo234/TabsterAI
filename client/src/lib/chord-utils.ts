@@ -12,8 +12,8 @@ const CHROMATIC_SCALE = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', '
 const FLAT_SCALE = ['C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B'];
 
 // Shared chord detection pattern - used for both transposition and chord detection
-// Match sharp/flat chords first, then standalone chords to avoid partial matches
-const CHORD_PATTERN = /([A-G][#b](?:m|maj|min|dim|aug|sus[24]?|add[69]|[0-9]+)?|[A-G](?:m|maj|min|dim|aug|sus[24]?|add[69]|[0-9]+)?)\b/g;
+// Use lookahead/lookbehind to avoid word boundary issues with # and b
+const CHORD_PATTERN = /(?<!\w)([A-G][#b]?(?:m|maj|min|dim|aug|sus[24]?|add[69]|[0-9]+)?)(?!\w)/g;
 
 // Common chord patterns for guitar
 const CHORD_DIAGRAMS: { [key: string]: ChordDiagram } = {
@@ -90,20 +90,11 @@ export function detectChords(text: string): { chord: string; position: number }[
     const isFretboardLine = /^[-\|]{5,}/.test(line.trim());
     
     if (!isTablatureLine && !isStringTuning && !isFretboardLine) {
-      // Debug specific problematic line
-      if (line.includes('C#')) {
-        console.log('Line with C#:', JSON.stringify(line));
-        console.log('Regex pattern:', CHORD_PATTERN.source);
-      }
-      
       // Only detect chords in lyrics/chord lines using shared pattern
       let lineMatch;
       const linePattern = new RegExp(CHORD_PATTERN.source, 'g');
       
       while ((lineMatch = linePattern.exec(line)) !== null) {
-        if (line.includes('C#')) {
-          console.log('Match found:', JSON.stringify(lineMatch[0]), 'captured:', JSON.stringify(lineMatch[1]));
-        }
         matches.push({
           chord: lineMatch[1],
           position: currentPosition + lineMatch.index
