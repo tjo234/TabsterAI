@@ -13,6 +13,7 @@ import PlaylistManager from "@/pages/playlist-manager";
 import Browse from "@/pages/browse";
 import MyTabs from "@/pages/my-tabs";
 import MyPlaylists from "@/pages/my-playlists";
+import Settings from "@/pages/settings";
 
 function Router() {
   const { isAuthenticated, isLoading } = useAuth();
@@ -32,6 +33,7 @@ function Router() {
           <Route path="/tabs" component={MyTabs} />
           <Route path="/playlists" component={MyPlaylists} />
           <Route path="/favorites" component={MyTabs} />
+          <Route path="/settings" component={Settings} />
         </>
       )}
       <Route component={NotFound} />

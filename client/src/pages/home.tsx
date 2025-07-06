@@ -12,9 +12,7 @@ import {
   List, 
   Heart, 
   TrendingUp, 
-  Plus, 
   Play, 
-  Download,
   Clock,
   Guitar 
 } from "lucide-react";
@@ -108,21 +106,7 @@ export default function Home() {
               <h2 className="text-3xl font-bold text-white">Dashboard</h2>
               <p className="text-gray-400 mt-1">Welcome back! Here's your guitar tab library.</p>
             </div>
-            <div className="flex items-center space-x-4">
-              <Button 
-                variant="outline" 
-                className="bg-dark-tertiary hover:bg-dark-quaternary text-white border-dark-quaternary"
-              >
-                <Download className="w-4 h-4 mr-2" />
-                Export All
-              </Button>
-              <Link href="/tab/new">
-                <Button className="bg-tabster-orange hover:bg-orange-600 text-white">
-                  <Plus className="w-4 h-4 mr-2" />
-                  Create Tab
-                </Button>
-              </Link>
-            </div>
+
           </div>
 
           {/* Stats Cards */}
