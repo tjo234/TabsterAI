@@ -51,6 +51,13 @@ export default {
           "4": "var(--chart-4)",
           "5": "var(--chart-5)",
         },
+        // Tabster custom colors
+        "tabster-orange": "var(--tabster-orange)",
+        "tabster-amber": "var(--tabster-amber)",
+        "dark-primary": "var(--dark-primary)",
+        "dark-secondary": "var(--dark-secondary)",
+        "dark-tertiary": "var(--dark-tertiary)",
+        "dark-quaternary": "var(--dark-quaternary)",
         sidebar: {
           DEFAULT: "var(--sidebar-background)",
           foreground: "var(--sidebar-foreground)",

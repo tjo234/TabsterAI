@@ -117,8 +117,8 @@ Tabster is a full-stack web application for creating, managing, and sharing guit
 
 ## Changelog
 
-Changelog:
-- July 06, 2025. Initial setup
+- **July 06, 2025** - Initial Tabster setup with complete authentication, tab management, and PDF export functionality
+- **July 06, 2025** - Fixed dark theme styling issues by properly configuring Tailwind custom color variables and session configuration for development environment
 
 ## User Preferences
 
