@@ -11,6 +11,9 @@ export interface ChordDiagram {
 const CHROMATIC_SCALE = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
 const FLAT_SCALE = ['C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B'];
 
+// Shared chord detection pattern - used for both transposition and chord detection
+const CHORD_PATTERN = /\b([A-G][#b]?(?:m|maj|min|dim|aug|sus[24]?|add[69]|[0-9]+)?)\b/g;
+
 // Common chord patterns for guitar
 const CHORD_DIAGRAMS: { [key: string]: ChordDiagram } = {
   // Major chords
@@ -20,6 +23,7 @@ const CHORD_DIAGRAMS: { [key: string]: ChordDiagram } = {
   'F': { name: 'F', frets: ['1', '3', '3', '2', '1', '1'], fingers: ['1', '3', '4', '2', '1', '1'], barres: [{ fret: 1, fromString: 1, toString: 6 }] },
   'G': { name: 'G', frets: ['3', '2', '0', '0', '3', '3'], fingers: ['3', '1', '', '', '4', '4'] },
   'A': { name: 'A', frets: ['x', '0', '2', '2', '2', '0'], fingers: ['', '', '1', '2', '3', ''] },
+  'Bb': { name: 'Bb', frets: ['x', '1', '3', '3', '3', '1'], fingers: ['', '1', '2', '3', '4', '1'], barres: [{ fret: 1, fromString: 2, toString: 5 }] },
   'B': { name: 'B', frets: ['x', '2', '4', '4', '4', '2'], fingers: ['', '1', '2', '3', '4', '1'], barres: [{ fret: 2, fromString: 2, toString: 5 }] },
   
   // Minor chords
@@ -28,6 +32,7 @@ const CHORD_DIAGRAMS: { [key: string]: ChordDiagram } = {
   'Em': { name: 'Em', frets: ['0', '2', '2', '0', '0', '0'], fingers: ['', '1', '2', '', '', ''] },
   'Fm': { name: 'Fm', frets: ['1', '3', '3', '1', '1', '1'], fingers: ['1', '3', '4', '1', '1', '1'], barres: [{ fret: 1, fromString: 1, toString: 6 }] },
   'Gm': { name: 'Gm', frets: ['3', '5', '5', '3', '3', '3'], fingers: ['1', '3', '4', '1', '1', '1'], barres: [{ fret: 3, fromString: 3, toString: 6 }] },
+  'Bbm': { name: 'Bbm', frets: ['x', '1', '3', '3', '2', '1'], fingers: ['', '1', '3', '4', '2', '1'], barres: [{ fret: 1, fromString: 2, toString: 5 }] },
   'Bm': { name: 'Bm', frets: ['x', '2', '4', '4', '3', '2'], fingers: ['', '1', '3', '4', '2', '1'], barres: [{ fret: 2, fromString: 2, toString: 5 }] },
   'Cm': { name: 'Cm', frets: ['x', '3', '5', '5', '4', '3'], fingers: ['', '1', '3', '4', '2', '1'], barres: [{ fret: 3, fromString: 2, toString: 5 }] },
   
@@ -38,14 +43,13 @@ const CHORD_DIAGRAMS: { [key: string]: ChordDiagram } = {
   'F7': { name: 'F7', frets: ['1', '3', '1', '2', '1', '1'], fingers: ['1', '3', '1', '2', '1', '1'], barres: [{ fret: 1, fromString: 1, toString: 6 }] },
   'G7': { name: 'G7', frets: ['3', '2', '0', '0', '0', '1'], fingers: ['3', '2', '', '', '', '1'] },
   'A7': { name: 'A7', frets: ['x', '0', '2', '0', '2', '0'], fingers: ['', '', '1', '', '2', ''] },
+  'Bb7': { name: 'Bb7', frets: ['x', '1', '3', '1', '3', '1'], fingers: ['', '1', '3', '1', '4', '1'], barres: [{ fret: 1, fromString: 2, toString: 6 }] },
   'B7': { name: 'B7', frets: ['x', '2', '1', '2', '0', '2'], fingers: ['', '2', '1', '3', '', '4'] },
 };
 
 // Detect chords in text using regex patterns
 export function detectChords(text: string): { chord: string; position: number }[] {
-  const chordPattern = /\b([A-G][#b]?(?:m|maj|min|dim|aug|sus[24]?|add[69]|[0-9]+)?)\b/g;
   const matches: { chord: string; position: number }[] = [];
-  let match;
   
   // Split text into lines to analyze context
   const lines = text.split('\n');
@@ -58,9 +62,9 @@ export function detectChords(text: string): { chord: string; position: number }[
     const isFretboardLine = /^[-\|]{5,}/.test(line.trim());
     
     if (!isTablatureLine && !isStringTuning && !isFretboardLine) {
-      // Only detect chords in lyrics/chord lines
+      // Only detect chords in lyrics/chord lines using shared pattern
       let lineMatch;
-      const linePattern = /\b([A-G][#b]?(?:m|maj|min|dim|aug|sus[24]?|add[69]|[0-9]+)?)\b/g;
+      const linePattern = new RegExp(CHORD_PATTERN.source, 'g');
       
       while ((lineMatch = linePattern.exec(line)) !== null) {
         matches.push({
@@ -122,8 +126,8 @@ export function transposeText(text: string, semitones: number): string {
       return line;
     }
     
-    // Transpose chords in lyrics/chord lines only
-    const chordPattern = /\b([A-G][#b]?(?:m|maj|min|dim|aug|sus[24]?|add[69]|[0-9]+)?)\b/g;
+    // Transpose chords in lyrics/chord lines only using shared pattern
+    const chordPattern = new RegExp(CHORD_PATTERN.source, 'g');
     return line.replace(chordPattern, (match) => {
       return transposeChord(match, semitones);
     });
