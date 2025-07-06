@@ -85,7 +85,7 @@ export default function Browse() {
               <SelectValue placeholder="All Genres" />
             </SelectTrigger>
             <SelectContent className="bg-dark-secondary border-dark-tertiary">
-              <SelectItem value="">All Genres</SelectItem>
+              <SelectItem value="all">All Genres</SelectItem>
               {genres.map((genre) => (
                 <SelectItem key={genre} value={genre.toLowerCase()}>
                   {genre}
@@ -98,7 +98,7 @@ export default function Browse() {
               <SelectValue placeholder="All Difficulties" />
             </SelectTrigger>
             <SelectContent className="bg-dark-secondary border-dark-tertiary">
-              <SelectItem value="">All Difficulties</SelectItem>
+              <SelectItem value="all">All Difficulties</SelectItem>
               {difficulties.map((difficulty) => (
                 <SelectItem key={difficulty} value={difficulty.toLowerCase()}>
                   {difficulty}

@@ -28,12 +28,12 @@ export default function Sidebar() {
             Quick Actions
           </h3>
           <div className="space-y-2">
-            <Link href="/tab/new">
-              <Button className="w-full bg-tabster-orange hover:bg-orange-600 text-white justify-start">
+            <Button asChild className="w-full bg-tabster-orange hover:bg-orange-600 text-white justify-start">
+              <Link href="/tab/new">
                 <Plus className="mr-3 h-4 w-4" />
                 Create New Tab
-              </Button>
-            </Link>
+              </Link>
+            </Button>
             <Button 
               variant="outline"
               className="w-full bg-dark-tertiary hover:bg-dark-quaternary text-white border-dark-quaternary justify-start"
