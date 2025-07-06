@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -8,6 +9,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  DialogClose,
 } from "@/components/ui/dialog";
 import { 
   ArrowLeft, 
@@ -47,6 +49,7 @@ export default function TabViewerComponent({
   onAddToPlaylist,
   addToPlaylistLoading,
 }: TabViewerComponentProps) {
+  const [dialogOpen, setDialogOpen] = useState(false);
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty.toLowerCase()) {
       case 'beginner': return 'bg-green-500/20 text-green-400 border-green-500/30';
@@ -108,7 +111,7 @@ export default function TabViewerComponent({
               </Button>
             )}
             {isAuthenticated && (
-              <Dialog>
+              <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
                 <DialogTrigger asChild>
                   <Button 
                     variant="outline"
@@ -139,7 +142,10 @@ export default function TabViewerComponent({
                           key={playlist.id}
                           variant="outline"
                           className="w-full justify-start bg-dark-tertiary hover:bg-dark-quaternary text-white border-dark-quaternary"
-                          onClick={() => onAddToPlaylist(playlist.id)}
+                          onClick={() => {
+                            onAddToPlaylist(playlist.id);
+                            setDialogOpen(false);
+                          }}
                           disabled={addToPlaylistLoading}
                         >
                           {addToPlaylistLoading ? (
