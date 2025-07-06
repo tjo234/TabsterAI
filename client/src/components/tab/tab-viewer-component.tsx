@@ -62,7 +62,10 @@ export default function TabViewerComponent({
 
   // Detect chords in the content for hover functionality
   const detectedChords = useMemo(() => {
-    return detectChords(transposedContent);
+    const chords = detectChords(transposedContent);
+    // Log detected chords to help debug highlighting issues
+    console.log('All detected chords:', chords.map(c => c.chord));
+    return chords;
   }, [transposedContent]);
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty.toLowerCase()) {
@@ -106,6 +109,10 @@ export default function TabViewerComponent({
 
       // Add interactive chord
       const chordDiagram = getChordDiagram(chordMatch.chord);
+      // Debug major sharp chords specifically
+      if (chordMatch.chord.match(/^[A-G]#$/)) {
+        console.log(`Major sharp chord "${chordMatch.chord}" -> diagram found:`, !!chordDiagram);
+      }
       if (chordDiagram) {
         parts.push(
           <Popover key={`chord-${index}`}>
