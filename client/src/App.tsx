@@ -11,6 +11,8 @@ import TabEditor from "@/pages/tab-editor";
 import TabViewer from "@/pages/tab-viewer";
 import PlaylistManager from "@/pages/playlist-manager";
 import Browse from "@/pages/browse";
+import MyTabs from "@/pages/my-tabs";
+import MyPlaylists from "@/pages/my-playlists";
 
 function Router() {
   const { isAuthenticated, isLoading } = useAuth();
@@ -27,6 +29,9 @@ function Router() {
           <Route path="/tab/:id" component={TabViewer} />
           <Route path="/playlist/:id" component={PlaylistManager} />
           <Route path="/browse/:category" component={Browse} />
+          <Route path="/tabs" component={MyTabs} />
+          <Route path="/playlists" component={MyPlaylists} />
+          <Route path="/favorites" component={MyTabs} />
         </>
       )}
       <Route component={NotFound} />
