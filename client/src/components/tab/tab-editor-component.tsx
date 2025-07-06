@@ -116,7 +116,7 @@ Use standard guitar tablature notation:
               className="text-gray-400 hover:text-white"
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
-              Back to Dashboard
+              Back
             </Button>
             <h2 className="text-3xl font-bold text-white">
               {isEditing ? 'Edit Tab' : 'Tab Editor'}
