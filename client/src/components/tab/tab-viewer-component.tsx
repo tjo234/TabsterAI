@@ -17,7 +17,10 @@ import {
   Download, 
   Edit,
   Play,
-  Loader2
+  Loader2,
+  ChevronUp,
+  ChevronDown,
+  RotateCcw
 } from "lucide-react";
 import type { TabWithUser, Playlist } from "@shared/schema";
 
@@ -47,6 +50,7 @@ export default function TabViewerComponent({
   addToPlaylistLoading,
 }: TabViewerComponentProps) {
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [transposeSteps, setTransposeSteps] = useState(0);
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty.toLowerCase()) {
       case 'beginner': return 'bg-green-500/20 text-green-400 border-green-500/30';
@@ -170,6 +174,52 @@ export default function TabViewerComponent({
             </Button>
           </div>
         </div>
+
+        {/* Transpose Controls */}
+        <Card className="bg-dark-secondary border-dark-tertiary">
+          <CardContent className="p-4">
+            <div className="flex items-center space-x-4">
+              <span className="text-gray-400 text-sm">Transpose:</span>
+              <div className="flex items-center space-x-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setTransposeSteps(prev => prev - 1)}
+                  className="bg-dark-tertiary hover:bg-dark-quaternary text-white border-dark-quaternary h-8 w-8 p-0"
+                >
+                  <ChevronDown className="w-4 h-4" />
+                </Button>
+                <div className="bg-dark-primary border border-dark-quaternary rounded px-3 py-1 min-w-[60px] text-center">
+                  <span className="text-white text-sm">
+                    {transposeSteps === 0 ? 'Original' : `${transposeSteps > 0 ? '+' : ''}${transposeSteps}`}
+                  </span>
+                </div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setTransposeSteps(prev => prev + 1)}
+                  className="bg-dark-tertiary hover:bg-dark-quaternary text-white border-dark-quaternary h-8 w-8 p-0"
+                >
+                  <ChevronUp className="w-4 h-4" />
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setTransposeSteps(0)}
+                  className="bg-dark-tertiary hover:bg-dark-quaternary text-white border-dark-quaternary ml-2"
+                >
+                  <RotateCcw className="w-4 h-4 mr-1" />
+                  Reset
+                </Button>
+              </div>
+              {transposeSteps !== 0 && (
+                <div className="text-gray-400 text-sm">
+                  {transposeSteps > 0 ? `+${transposeSteps}` : transposeSteps} semitones
+                </div>
+              )}
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Tab Info */}
         <Card className="bg-dark-secondary border-dark-tertiary">
