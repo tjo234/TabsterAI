@@ -284,15 +284,9 @@ export default function TabViewerComponent({
                   Lines: <span className="text-white">{tab.content.split('\n').length}</span>
                 </span>
                 <span>
-                  {tab.isPublic ? (
-                    <Badge variant="outline" className="bg-green-500/20 text-green-400 border-green-500/30">
-                      Public
-                    </Badge>
-                  ) : (
-                    <Badge variant="outline" className="bg-gray-500/20 text-gray-400 border-gray-500/30">
-                      Private
-                    </Badge>
-                  )}
+                  <Badge variant="outline" className="bg-green-500/20 text-green-400 border-green-500/30">
+                    Public
+                  </Badge>
                 </span>
               </div>
               {tab.updatedAt && tab.updatedAt !== tab.createdAt && (
