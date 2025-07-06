@@ -235,7 +235,7 @@ export default function MyTabs() {
                   <div className="flex items-center justify-between text-sm text-gray-400 mb-4">
                     <div className="flex items-center">
                       <Calendar className="h-4 w-4 mr-1" />
-                      {tab.createdAt ? new Date(tab.createdAt as string).toLocaleDateString() : 'Unknown'}
+                      {tab.createdAt ? new Date(tab.createdAt).toLocaleDateString() : 'Unknown'}
                     </div>
                   </div>
 
