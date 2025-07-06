@@ -53,9 +53,6 @@ export default function Header() {
 
           {/* Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
-            <Link href="/browse" className="text-white hover:text-tabster-orange transition-colors">
-              Browse
-            </Link>
             <Link href="/tabs" className="text-white hover:text-tabster-orange transition-colors">
               My Tabs
             </Link>
