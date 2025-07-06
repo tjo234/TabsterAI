@@ -60,7 +60,7 @@ export default function Header() {
               Playlists
             </Link>
             <Link href="/tab/new" className="text-white hover:text-tabster-orange transition-colors">
-              Create Tab
+              Submit Tab
             </Link>
           </nav>
 
