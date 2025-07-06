@@ -57,19 +57,12 @@ export default function TabViewerComponent({
 
   // Compute transposed content
   const transposedContent = useMemo(() => {
-    const transposed = transposeText(tab.content, transposeSteps);
-    if (transposeSteps !== 0) {
-      console.log('Transposed content sample:', transposed.substring(0, 200));
-    }
-    return transposed;
+    return transposeText(tab.content, transposeSteps);
   }, [tab.content, transposeSteps]);
 
   // Detect chords in the content for hover functionality
   const detectedChords = useMemo(() => {
-    const chords = detectChords(transposedContent);
-    // Log detected chords to help debug highlighting issues
-    console.log('All detected chords:', chords.map(c => c.chord));
-    return chords;
+    return detectChords(transposedContent);
   }, [transposedContent]);
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty.toLowerCase()) {
@@ -113,10 +106,6 @@ export default function TabViewerComponent({
 
       // Add interactive chord
       const chordDiagram = getChordDiagram(chordMatch.chord);
-      // Debug major sharp chords specifically
-      if (chordMatch.chord.match(/^[A-G]#$/)) {
-        console.log(`Major sharp chord "${chordMatch.chord}" -> diagram found:`, !!chordDiagram);
-      }
       if (chordDiagram) {
         parts.push(
           <Popover key={`chord-${index}`}>

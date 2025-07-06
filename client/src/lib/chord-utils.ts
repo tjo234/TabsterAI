@@ -12,7 +12,8 @@ const CHROMATIC_SCALE = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', '
 const FLAT_SCALE = ['C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B'];
 
 // Shared chord detection pattern - used for both transposition and chord detection
-const CHORD_PATTERN = /\b([A-G][#b]?(?:m|maj|min|dim|aug|sus[24]?|add[69]|[0-9]+)?)\b/g;
+// Match sharp/flat chords first, then standalone chords to avoid partial matches
+const CHORD_PATTERN = /([A-G][#b](?:m|maj|min|dim|aug|sus[24]?|add[69]|[0-9]+)?|[A-G](?:m|maj|min|dim|aug|sus[24]?|add[69]|[0-9]+)?)\b/g;
 
 // Common chord patterns for guitar
 const CHORD_DIAGRAMS: { [key: string]: ChordDiagram } = {
@@ -94,11 +95,6 @@ export function detectChords(text: string): { chord: string; position: number }[
       const linePattern = new RegExp(CHORD_PATTERN.source, 'g');
       
       while ((lineMatch = linePattern.exec(line)) !== null) {
-        // Debug log to see what's being captured
-        console.log(`Full match: "${lineMatch[0]}", captured: "${lineMatch[1]}", from line: "${line}"`);
-        if (lineMatch[1].includes('#') || lineMatch[1].includes('b')) {
-          console.log(`Detected sharp/flat chord: "${lineMatch[1]}" from line: "${line}"`);
-        }
         matches.push({
           chord: lineMatch[1],
           position: currentPosition + lineMatch.index
