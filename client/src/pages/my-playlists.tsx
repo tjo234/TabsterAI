@@ -26,6 +26,17 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { Link } from "wouter";
 import { useToast } from "@/hooks/use-toast";
 import Header from "@/components/layout/header";
@@ -34,6 +45,9 @@ import type { Playlist } from "@shared/schema";
 
 export default function MyPlaylists() {
   const [searchQuery, setSearchQuery] = useState("");
+  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
+  const [newPlaylistName, setNewPlaylistName] = useState("");
+  const [newPlaylistDescription, setNewPlaylistDescription] = useState("");
   const { toast } = useToast();
 
   const { data: playlists = [], isLoading, error } = useQuery<Playlist[]>({
@@ -63,6 +77,45 @@ export default function MyPlaylists() {
       });
     },
   });
+
+  const createMutation = useMutation({
+    mutationFn: async (playlistData: { name: string; description: string }) => {
+      const response = await apiRequest("POST", "/api/playlists", playlistData);
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/playlists"] });
+      setIsCreateDialogOpen(false);
+      setNewPlaylistName("");
+      setNewPlaylistDescription("");
+      toast({
+        title: "Success",
+        description: "Playlist created successfully!",
+      });
+    },
+    onError: (error) => {
+      toast({
+        title: "Error",
+        description: "Failed to create playlist. Please try again.",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const handleCreatePlaylist = () => {
+    if (!newPlaylistName.trim()) {
+      toast({
+        title: "Error",
+        description: "Please enter a playlist name.",
+        variant: "destructive",
+      });
+      return;
+    }
+    createMutation.mutate({
+      name: newPlaylistName.trim(),
+      description: newPlaylistDescription.trim(),
+    });
+  };
 
   // Filter playlists based on search
   const filteredPlaylists = playlists.filter(playlist => {
@@ -96,10 +149,67 @@ export default function MyPlaylists() {
             <h1 className="text-3xl font-bold text-white mb-2">My Playlists</h1>
             <p className="text-gray-400">Organize your tabs into collections</p>
           </div>
-          <Button className="bg-tabster-orange hover:bg-tabster-amber text-white">
-            <Plus className="mr-2 h-4 w-4" />
-            Create New Playlist
-          </Button>
+          <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
+            <DialogTrigger asChild>
+              <Button className="bg-tabster-orange hover:bg-tabster-amber text-white">
+                <Plus className="mr-2 h-4 w-4" />
+                Create New Playlist
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="bg-dark-secondary border-dark-tertiary">
+              <DialogHeader>
+                <DialogTitle className="text-white">Create New Playlist</DialogTitle>
+                <DialogDescription className="text-gray-400">
+                  Create a new playlist to organize your favorite tabs.
+                </DialogDescription>
+              </DialogHeader>
+              <div className="grid gap-4 py-4">
+                <div className="grid gap-2">
+                  <Label htmlFor="name" className="text-white">
+                    Playlist Name
+                  </Label>
+                  <Input
+                    id="name"
+                    value={newPlaylistName}
+                    onChange={(e) => setNewPlaylistName(e.target.value)}
+                    placeholder="Enter playlist name..."
+                    className="bg-dark-tertiary border-dark-quaternary text-white"
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="description" className="text-white">
+                    Description (Optional)
+                  </Label>
+                  <Textarea
+                    id="description"
+                    value={newPlaylistDescription}
+                    onChange={(e) => setNewPlaylistDescription(e.target.value)}
+                    placeholder="Enter playlist description..."
+                    className="bg-dark-tertiary border-dark-quaternary text-white resize-none"
+                    rows={3}
+                  />
+                </div>
+              </div>
+              <DialogFooter>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => setIsCreateDialogOpen(false)}
+                  className="bg-dark-tertiary hover:bg-dark-quaternary text-white border-dark-quaternary"
+                >
+                  Cancel
+                </Button>
+                <Button
+                  type="button"
+                  onClick={handleCreatePlaylist}
+                  disabled={createMutation.isPending}
+                  className="bg-tabster-orange hover:bg-tabster-amber text-white"
+                >
+                  {createMutation.isPending ? "Creating..." : "Create Playlist"}
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
         </div>
 
         {/* Search */}
