@@ -130,6 +130,7 @@ Tabster is a full-stack web application for creating, managing, and sharing guit
 - **July 06, 2025** - Removed "Back to Dashboard" button from View Tab page for cleaner navigation. Simplified tablature section to show only the tab content without extra controls, headers, or stats for focused reading experience. Updated tab text styling to white color with larger font size for improved readability.
 - **July 06, 2025** - Added transpose controls with full chord transposition logic and hover chord diagrams. Implemented smart chord detection that only transposes chord symbols over lyrics while preserving tablature notation, string tuning (EADGBE), and fret numbers. Created comprehensive chord diagram library with finger positions.
 - **July 06, 2025** - Fixed critical chord detection regex issue where sharp chords (C#, D#, F#, etc.) were being split into separate letters and symbols. Updated regex pattern to use lookbehind/lookahead assertions to properly capture complete sharp/flat chord names for accurate highlighting and diagram display.
+- **July 06, 2025** - Successfully imported 116 completed White Stripes guitar tabs from brokenbricks.com, including complex notation with guitar tablature, chord diagrams, tuning specifications, and detailed performance notes. Systematically checked and imported tabs like "Hello Operator," "Hypnotize," "White Moon," "Van Lear Rose," "Stop Breaking Down," and many others with complete original content preservation.
 
 ## User Preferences
 
