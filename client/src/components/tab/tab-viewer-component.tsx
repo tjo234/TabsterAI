@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { 
   Dialog,
   DialogContent,
@@ -23,6 +24,8 @@ import {
   RotateCcw
 } from "lucide-react";
 import type { TabWithUser, Playlist } from "@shared/schema";
+import { transposeText, detectChords, getChordDiagram } from "@/lib/chord-utils";
+import { ChordDiagram } from "@/components/ui/chord-diagram";
 
 interface TabViewerComponentProps {
   tab: TabWithUser;
@@ -51,6 +54,16 @@ export default function TabViewerComponent({
 }: TabViewerComponentProps) {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [transposeSteps, setTransposeSteps] = useState(0);
+
+  // Compute transposed content
+  const transposedContent = useMemo(() => {
+    return transposeText(tab.content, transposeSteps);
+  }, [tab.content, transposeSteps]);
+
+  // Detect chords in the content for hover functionality
+  const detectedChords = useMemo(() => {
+    return detectChords(transposedContent);
+  }, [transposedContent]);
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty.toLowerCase()) {
       case 'beginner': return 'bg-green-500/20 text-green-400 border-green-500/30';
@@ -71,6 +84,67 @@ export default function TabViewerComponent({
   };
 
   const canEdit = isAuthenticated && tab.user.id; // User can edit their own tabs
+
+  // Function to render content with interactive chords
+  const renderContentWithChords = (content: string) => {
+    if (detectedChords.length === 0) {
+      return <pre className="tab-text text-white text-base leading-relaxed whitespace-pre-wrap overflow-x-auto">{content}</pre>;
+    }
+
+    const parts = [];
+    let lastIndex = 0;
+
+    detectedChords.forEach((chordMatch, index) => {
+      // Add text before chord
+      if (chordMatch.position > lastIndex) {
+        parts.push(
+          <span key={`text-${index}`}>
+            {content.slice(lastIndex, chordMatch.position)}
+          </span>
+        );
+      }
+
+      // Add interactive chord
+      const chordDiagram = getChordDiagram(chordMatch.chord);
+      if (chordDiagram) {
+        parts.push(
+          <Popover key={`chord-${index}`}>
+            <PopoverTrigger asChild>
+              <span className="text-blue-400 hover:text-blue-300 cursor-pointer underline decoration-dotted">
+                {chordMatch.chord}
+              </span>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0" side="top">
+              <ChordDiagram chord={chordDiagram} />
+            </PopoverContent>
+          </Popover>
+        );
+      } else {
+        parts.push(
+          <span key={`chord-${index}`} className="text-blue-400">
+            {chordMatch.chord}
+          </span>
+        );
+      }
+
+      lastIndex = chordMatch.position + chordMatch.chord.length;
+    });
+
+    // Add remaining text
+    if (lastIndex < content.length) {
+      parts.push(
+        <span key="text-final">
+          {content.slice(lastIndex)}
+        </span>
+      );
+    }
+
+    return (
+      <pre className="tab-text text-white text-base leading-relaxed whitespace-pre-wrap overflow-x-auto">
+        {parts}
+      </pre>
+    );
+  };
 
   return (
     <main className="flex-1 p-6">
@@ -268,9 +342,7 @@ export default function TabViewerComponent({
         {/* Tab Content */}
         <Card className="bg-dark-secondary border-dark-tertiary">
           <CardContent className="p-6">
-            <pre className="tab-text text-white text-base leading-relaxed whitespace-pre-wrap overflow-x-auto">
-              {tab.content}
-            </pre>
+            {renderContentWithChords(transposedContent)}
           </CardContent>
         </Card>
       </div>
