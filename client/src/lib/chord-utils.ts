@@ -151,6 +151,13 @@ export function transposeText(text: string, semitones: number): string {
 
 // Get chord diagram for a chord
 export function getChordDiagram(chordName: string): ChordDiagram | null {
+  // Debug logging for specific chords
+  if (chordName === 'C#' || chordName === 'D#') {
+    console.log(`getChordDiagram: Looking for "${chordName}"`);
+    console.log(`Available keys: `, Object.keys(CHORD_DIAGRAMS).filter(k => k.includes('#')));
+    console.log(`Direct lookup result: `, CHORD_DIAGRAMS[chordName]);
+  }
+  
   // First try exact match
   if (CHORD_DIAGRAMS[chordName]) {
     return CHORD_DIAGRAMS[chordName];

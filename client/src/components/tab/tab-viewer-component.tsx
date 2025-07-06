@@ -106,6 +106,10 @@ export default function TabViewerComponent({
 
       // Add interactive chord
       const chordDiagram = getChordDiagram(chordMatch.chord);
+      // Debug logging for chord lookup
+      if (chordMatch.chord === 'C#' || chordMatch.chord === 'D#') {
+        console.log(`Chord lookup: ${chordMatch.chord} -> `, chordDiagram);
+      }
       if (chordDiagram) {
         parts.push(
           <Popover key={`chord-${index}`}>
