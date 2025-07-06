@@ -19,7 +19,7 @@ import {
   Clock,
   Guitar 
 } from "lucide-react";
-import type { Tab, Playlist } from "@shared/schema";
+import type { Tab, Playlist, TabWithUser } from "@shared/schema";
 
 interface UserStats {
   totalTabs: number;
@@ -59,6 +59,16 @@ export default function Home() {
 
   const { data: playlists, isLoading: playlistsLoading } = useQuery<Playlist[]>({
     queryKey: ["/api/playlists"],
+    retry: false,
+  });
+
+  const { data: popularTabs, isLoading: popularLoading } = useQuery<TabWithUser[]>({
+    queryKey: ["/api/tabs/public/browse", "popular"],
+    retry: false,
+  });
+
+  const { data: recentPublicTabs, isLoading: recentPublicLoading } = useQuery<TabWithUser[]>({
+    queryKey: ["/api/tabs/public/browse", "recent"],
     retry: false,
   });
 
@@ -340,6 +350,140 @@ export default function Home() {
                       <Plus className="w-4 h-4 mr-2" />
                       Create Your First Playlist
                     </Button>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+
+            {/* Popular Tabs Section */}
+            <Card className="bg-dark-secondary border-dark-tertiary">
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between mb-6">
+                  <h3 className="text-xl font-semibold text-white">Popular Tabs</h3>
+                  <Button 
+                    variant="outline" 
+                    className="bg-dark-tertiary hover:bg-dark-quaternary text-white border-dark-quaternary"
+                  >
+                    View All
+                  </Button>
+                </div>
+                
+                {popularLoading ? (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {[...Array(6)].map((_, i) => (
+                      <div key={i} className="animate-pulse bg-dark-tertiary rounded-lg p-4 h-32"></div>
+                    ))}
+                  </div>
+                ) : popularTabs && popularTabs.length > 0 ? (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {popularTabs.slice(0, 6).map((tab) => (
+                      <Link key={tab.id} href={`/tab/${tab.id}`}>
+                        <div className="bg-dark-tertiary border border-dark-quaternary rounded-lg p-4 hover:border-tabster-orange transition-colors cursor-pointer">
+                          <div className="flex items-center mb-3">
+                            <div className="w-10 h-10 bg-tabster-orange/20 rounded-lg flex items-center justify-center mr-3">
+                              <Music className="text-tabster-orange" />
+                            </div>
+                            <div className="flex-1">
+                              <h4 className="text-white font-medium truncate">{tab.title}</h4>
+                              <p className="text-gray-400 text-sm">by {tab.user.email?.split('@')[0] || 'Anonymous'}</p>
+                            </div>
+                          </div>
+                          <div className="flex items-center justify-between text-sm">
+                            <div className="flex items-center space-x-2">
+                              {tab.genre && (
+                                <span className="px-2 py-1 bg-dark-quaternary text-gray-300 rounded text-xs">
+                                  {tab.genre}
+                                </span>
+                              )}
+                              {tab.difficulty && (
+                                <span className={`text-xs ${getDifficultyColor(tab.difficulty)}`}>
+                                  {tab.difficulty}
+                                </span>
+                              )}
+                            </div>
+                            <Button 
+                              size="sm" 
+                              variant="ghost"
+                              className="w-8 h-8 p-0 bg-dark-quaternary hover:bg-tabster-orange"
+                            >
+                              <Play className="w-3 h-3" />
+                            </Button>
+                          </div>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-12">
+                    <TrendingUp className="w-16 h-16 text-gray-500 mx-auto mb-4" />
+                    <h4 className="text-lg font-medium text-white mb-2">No popular tabs yet</h4>
+                    <p className="text-gray-400">Be the first to create a popular tab!</p>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+
+            {/* Recent Community Tabs Section */}
+            <Card className="bg-dark-secondary border-dark-tertiary">
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between mb-6">
+                  <h3 className="text-xl font-semibold text-white">Recent Community Tabs</h3>
+                  <Button 
+                    variant="outline" 
+                    className="bg-dark-tertiary hover:bg-dark-quaternary text-white border-dark-quaternary"
+                  >
+                    View All
+                  </Button>
+                </div>
+                
+                {recentPublicLoading ? (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {[...Array(6)].map((_, i) => (
+                      <div key={i} className="animate-pulse bg-dark-tertiary rounded-lg p-4 h-32"></div>
+                    ))}
+                  </div>
+                ) : recentPublicTabs && recentPublicTabs.length > 0 ? (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {recentPublicTabs.slice(0, 6).map((tab) => (
+                      <Link key={tab.id} href={`/tab/${tab.id}`}>
+                        <div className="bg-dark-tertiary border border-dark-quaternary rounded-lg p-4 hover:border-tabster-orange transition-colors cursor-pointer">
+                          <div className="flex items-center mb-3">
+                            <div className="w-10 h-10 bg-tabster-orange/20 rounded-lg flex items-center justify-center mr-3">
+                              <Clock className="text-tabster-orange" />
+                            </div>
+                            <div className="flex-1">
+                              <h4 className="text-white font-medium truncate">{tab.title}</h4>
+                              <p className="text-gray-400 text-sm">by {tab.user.email?.split('@')[0] || 'Anonymous'}</p>
+                            </div>
+                          </div>
+                          <div className="flex items-center justify-between text-sm">
+                            <div className="flex items-center space-x-2">
+                              {tab.genre && (
+                                <span className="px-2 py-1 bg-dark-quaternary text-gray-300 rounded text-xs">
+                                  {tab.genre}
+                                </span>
+                              )}
+                              <span className="text-gray-500 text-xs">
+                                {formatTimeAgo(tab.createdAt)}
+                              </span>
+                            </div>
+                            <Button 
+                              size="sm" 
+                              variant="ghost"
+                              className="w-8 h-8 p-0 bg-dark-quaternary hover:bg-tabster-orange"
+                            >
+                              <Play className="w-3 h-3" />
+                            </Button>
+                          </div>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-12">
+                    <Clock className="w-16 h-16 text-gray-500 mx-auto mb-4" />
+                    <h4 className="text-lg font-medium text-white mb-2">No recent tabs yet</h4>
+                    <p className="text-gray-400">Community tabs will appear here as they're created</p>
                   </div>
                 )}
               </CardContent>

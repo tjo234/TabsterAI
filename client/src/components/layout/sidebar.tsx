@@ -3,10 +3,6 @@ import { Button } from "@/components/ui/button";
 import { 
   Plus, 
   List, 
-  Flame, 
-  Clock, 
-  Star, 
-  Shuffle, 
   Heart, 
   Folder, 
   ListMusic 
@@ -41,51 +37,6 @@ export default function Sidebar() {
               <List className="mr-3 h-4 w-4" />
               New Playlist
             </Button>
-          </div>
-        </div>
-
-        {/* Browse */}
-        <div>
-          <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wide mb-3">
-            Browse
-          </h3>
-          <div className="space-y-1">
-            <Link 
-              href="/browse/popular"
-              className={`block px-3 py-2 text-gray-300 hover:text-tabster-orange hover:bg-dark-tertiary rounded transition-colors ${
-                isActive('/browse/popular') ? 'text-tabster-orange bg-dark-tertiary' : ''
-              }`}
-            >
-              <Flame className="inline mr-3 h-4 w-4" />
-              Popular
-            </Link>
-            <Link 
-              href="/browse/recent"
-              className={`block px-3 py-2 text-gray-300 hover:text-tabster-orange hover:bg-dark-tertiary rounded transition-colors ${
-                isActive('/browse/recent') ? 'text-tabster-orange bg-dark-tertiary' : ''
-              }`}
-            >
-              <Clock className="inline mr-3 h-4 w-4" />
-              Recent
-            </Link>
-            <Link 
-              href="/browse/top-rated"
-              className={`block px-3 py-2 text-gray-300 hover:text-tabster-orange hover:bg-dark-tertiary rounded transition-colors ${
-                isActive('/browse/top-rated') ? 'text-tabster-orange bg-dark-tertiary' : ''
-              }`}
-            >
-              <Star className="inline mr-3 h-4 w-4" />
-              Top Rated
-            </Link>
-            <Link 
-              href="/browse/discover"
-              className={`block px-3 py-2 text-gray-300 hover:text-tabster-orange hover:bg-dark-tertiary rounded transition-colors ${
-                isActive('/browse/discover') ? 'text-tabster-orange bg-dark-tertiary' : ''
-              }`}
-            >
-              <Shuffle className="inline mr-3 h-4 w-4" />
-              Discover
-            </Link>
           </div>
         </div>
 
