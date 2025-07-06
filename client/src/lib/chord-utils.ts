@@ -18,9 +18,9 @@ const CHORD_PATTERN = /\b([A-G][#b]?(?:m|maj|min|dim|aug|sus[24]?|add[69]|[0-9]+
 const CHORD_DIAGRAMS: { [key: string]: ChordDiagram } = {
   // Major chords
   'C': { name: 'C', frets: ['x', '3', '2', '0', '1', '0'], fingers: ['', '3', '2', '', '1', ''] },
-  'C#': { name: 'C#', frets: ['x', '4', '6', '6', '6', '4'], fingers: ['', '1', '3', '4', '4', '1'], barres: [{ fret: 4, fromString: 2, toString: 5 }] },
+  'C#': { name: 'C#', frets: ['x', '4', '3', '1', '2', '1'], fingers: ['', '4', '3', '1', '2', '1'], barres: [{ fret: 1, fromString: 4, toString: 6 }] },
   'D': { name: 'D', frets: ['x', 'x', '0', '2', '3', '2'], fingers: ['', '', '', '1', '3', '2'] },
-  'D#': { name: 'D#', frets: ['x', '6', '8', '8', '8', '6'], fingers: ['', '1', '3', '4', '4', '1'], barres: [{ fret: 6, fromString: 2, toString: 5 }] },
+  'D#': { name: 'D#', frets: ['x', 'x', '1', '3', '4', '3'], fingers: ['', '', '1', '2', '4', '3'] },
   'E': { name: 'E', frets: ['0', '2', '2', '1', '0', '0'], fingers: ['', '2', '3', '1', '', ''] },
   'F': { name: 'F', frets: ['1', '3', '3', '2', '1', '1'], fingers: ['1', '3', '4', '2', '1', '1'], barres: [{ fret: 1, fromString: 1, toString: 6 }] },
   'F#': { name: 'F#', frets: ['2', '4', '4', '3', '2', '2'], fingers: ['1', '3', '4', '2', '1', '1'], barres: [{ fret: 2, fromString: 1, toString: 6 }] },
@@ -39,7 +39,7 @@ const CHORD_DIAGRAMS: { [key: string]: ChordDiagram } = {
   'Cm': { name: 'Cm', frets: ['x', '3', '5', '5', '4', '3'], fingers: ['', '1', '3', '4', '2', '1'], barres: [{ fret: 3, fromString: 2, toString: 5 }] },
   'C#m': { name: 'C#m', frets: ['x', '4', '6', '6', '5', '4'], fingers: ['', '1', '3', '4', '2', '1'], barres: [{ fret: 4, fromString: 2, toString: 5 }] },
   'Dm': { name: 'Dm', frets: ['x', 'x', '0', '2', '3', '1'], fingers: ['', '', '', '1', '3', '2'] },
-  'D#m': { name: 'D#m', frets: ['x', '6', '8', '8', '7', '6'], fingers: ['', '1', '3', '4', '2', '1'], barres: [{ fret: 6, fromString: 2, toString: 5 }] },
+  'D#m': { name: 'D#m', frets: ['x', 'x', '1', '3', '4', '2'], fingers: ['', '', '1', '3', '4', '2'] },
   'Em': { name: 'Em', frets: ['0', '2', '2', '0', '0', '0'], fingers: ['', '1', '2', '', '', ''] },
   'Fm': { name: 'Fm', frets: ['1', '3', '3', '1', '1', '1'], fingers: ['1', '3', '4', '1', '1', '1'], barres: [{ fret: 1, fromString: 1, toString: 6 }] },
   'F#m': { name: 'F#m', frets: ['2', '4', '4', '2', '2', '2'], fingers: ['1', '3', '4', '1', '1', '1'], barres: [{ fret: 2, fromString: 1, toString: 6 }] },
