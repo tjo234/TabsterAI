@@ -111,7 +111,7 @@ Use standard guitar tablature notation:
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-3xl font-bold text-white">
-              {isEditing ? 'Edit Tab' : 'Tab Editor'}
+              {isEditing ? 'Edit Tab' : 'Submit Tab'}
             </h2>
           </div>
           <div className="flex items-center space-x-4">
