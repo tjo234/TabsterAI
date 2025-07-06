@@ -124,6 +124,7 @@ Tabster is a full-stack web application for creating, managing, and sharing guit
 - **July 06, 2025** - Removed "Browse" link from header navigation for cleaner UI. Users can browse tabs through dashboard sections (Popular, Recent, Top Rated).
 - **July 06, 2025** - Removed sidebar navigation completely. Application now uses full-width layout with header-only navigation for cleaner, more modern interface.
 - **July 06, 2025** - Added header navigation to My Tabs and My Playlists pages for consistent navigation across all pages.
+- **July 06, 2025** - Created admin-only Settings panel with role-based access control. Added isAdmin field to user schema, moved "Export All" and "Create Tab" buttons from Dashboard to Settings page for admin users only.
 
 ## User Preferences
 
