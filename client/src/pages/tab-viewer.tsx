@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { useRoute, useLocation } from "wouter";
 import { useToast } from "@/hooks/use-toast";
+import { Check } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { isUnauthorizedError } from "@/lib/authUtils";
 import { apiRequest, queryClient } from "@/lib/queryClient";
@@ -121,8 +122,9 @@ export default function TabViewer() {
     onSuccess: (data) => {
       console.log("Add to playlist success:", data);
       toast({
-        title: "Success",
+        title: "✓ Success",
         description: "Tab added to playlist!",
+        className: "border-green-500/50 bg-green-950/80 text-green-50",
       });
       queryClient.invalidateQueries({ queryKey: ["/api/playlists"] });
       queryClient.invalidateQueries({ queryKey: ["/api/playlist-items"] });

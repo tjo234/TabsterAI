@@ -13,7 +13,8 @@ import {
   Eye, 
   Calendar,
   ListMusic,
-  Music
+  Music,
+  Check
 } from "lucide-react";
 import {
   AlertDialog,
@@ -89,8 +90,9 @@ export default function MyPlaylists() {
       setNewPlaylistName("");
       setNewPlaylistDescription("");
       toast({
-        title: "Success",
+        title: "✓ Success",
         description: "Playlist created successfully!",
+        className: "border-green-500/50 bg-green-950/80 text-green-50",
       });
     },
     onError: (error) => {
