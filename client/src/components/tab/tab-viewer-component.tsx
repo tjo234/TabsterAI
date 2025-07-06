@@ -12,7 +12,6 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 import { 
-  ArrowLeft, 
   Heart, 
   Plus, 
   Download, 
@@ -29,7 +28,6 @@ interface TabViewerComponentProps {
   onToggleFavorite: () => void;
   onExportPDF: () => void;
   onEdit: () => void;
-  onBack: () => void;
   favoriteMutationLoading: boolean;
   playlists: Playlist[];
   onAddToPlaylist: (playlistId: number) => void;
@@ -43,7 +41,6 @@ export default function TabViewerComponent({
   onToggleFavorite,
   onExportPDF,
   onEdit,
-  onBack,
   favoriteMutationLoading,
   playlists,
   onAddToPlaylist,
@@ -76,19 +73,9 @@ export default function TabViewerComponent({
       <div className="space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-4">
-            <Button 
-              variant="ghost" 
-              onClick={onBack}
-              className="text-gray-400 hover:text-white"
-            >
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Back to Dashboard
-            </Button>
-            <div>
-              <h2 className="text-3xl font-bold text-white">{tab.title}</h2>
-              <p className="text-gray-400">by {tab.artist}</p>
-            </div>
+          <div>
+            <h2 className="text-3xl font-bold text-white">{tab.title}</h2>
+            <p className="text-gray-400">by {tab.artist}</p>
           </div>
           <div className="flex items-center space-x-4">
             {isAuthenticated && (

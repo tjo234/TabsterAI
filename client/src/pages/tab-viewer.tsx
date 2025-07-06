@@ -224,7 +224,7 @@ export default function TabViewer() {
         onToggleFavorite={handleToggleFavorite}
         onExportPDF={handleExportPDF}
         onEdit={handleEdit}
-        onBack={() => navigate("/")}
+
         favoriteMutationLoading={addFavoriteMutation.isPending || removeFavoriteMutation.isPending}
         playlists={playlists || []}
         onAddToPlaylist={handleAddToPlaylist}
