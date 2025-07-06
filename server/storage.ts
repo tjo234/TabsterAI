@@ -19,7 +19,7 @@ import {
   type PlaylistItemWithTab,
 } from "@shared/schema";
 import { db } from "./db";
-import { eq, desc, asc, and, like, or } from "drizzle-orm";
+import { eq, desc, asc, and, like, or, sql } from "drizzle-orm";
 
 export interface IStorage {
   // User operations (mandatory for Replit Auth)
@@ -149,10 +149,11 @@ export class DatabaseStorage implements IStorage {
   }
 
   async searchTabs(query: string, userId?: string): Promise<TabWithUser[]> {
+    // PostgreSQL ILIKE for case-insensitive search
     const searchCondition = or(
-      like(tabs.title, `%${query}%`),
-      like(tabs.artist, `%${query}%`),
-      like(tabs.content, `%${query}%`)
+      sql`${tabs.title} ILIKE ${'%' + query + '%'}`,
+      sql`${tabs.artist} ILIKE ${'%' + query + '%'}`,
+      sql`${tabs.content} ILIKE ${'%' + query + '%'}`
     );
 
     const conditions = userId 
