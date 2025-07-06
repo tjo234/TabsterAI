@@ -114,14 +114,19 @@ export default function TabViewer() {
         playlistId, 
         tabId 
       });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
       return response.json();
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
+      console.log("Add to playlist success:", data);
       toast({
         title: "Success",
         description: "Tab added to playlist!",
       });
       queryClient.invalidateQueries({ queryKey: ["/api/playlists"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/playlist-items"] });
     },
     onError: (error) => {
       if (isUnauthorizedError(error)) {
