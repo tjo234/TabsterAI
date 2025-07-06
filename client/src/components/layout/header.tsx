@@ -40,7 +40,7 @@ export default function Header() {
   };
 
   return (
-    <header className="bg-dark-secondary border-b border-dark-tertiary sticky top-0 z-50">
+    <header className="bg-dark-secondary border-b border-dark-tertiary sticky top-0 z-50 backdrop-blur-sm" style={{ backgroundColor: 'hsl(0, 0%, 16.5%)' }}>
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
