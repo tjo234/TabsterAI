@@ -92,7 +92,11 @@ export default function Header() {
                     </Avatar>
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-56 bg-dark-secondary border-dark-tertiary" align="end">
+                <DropdownMenuContent 
+                  className="w-56 bg-dark-secondary border-dark-tertiary" 
+                  align="end"
+                  style={{ backgroundColor: 'hsl(0, 0%, 16.5%)', backdropFilter: 'blur(8px)' }}
+                >
                   <div className="flex items-center justify-start gap-2 p-2">
                     <div className="flex flex-col space-y-1 leading-none">
                       {user?.firstName && user?.lastName && (
