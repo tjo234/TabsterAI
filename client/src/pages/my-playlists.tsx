@@ -42,9 +42,10 @@ export default function MyPlaylists() {
 
   const deleteMutation = useMutation({
     mutationFn: async (playlistId: number) => {
-      await apiRequest(`/api/playlists/${playlistId}`, {
+      const response = await fetch(`/api/playlists/${playlistId}`, {
         method: "DELETE",
       });
+      if (!response.ok) throw new Error("Failed to delete playlist");
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/playlists"] });
@@ -65,7 +66,7 @@ export default function MyPlaylists() {
   // Filter playlists based on search
   const filteredPlaylists = playlists.filter(playlist => {
     const matchesSearch = !searchQuery || 
-      playlist.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      playlist.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       playlist.description?.toLowerCase().includes(searchQuery.toLowerCase());
     
     return matchesSearch;
@@ -160,7 +161,7 @@ export default function MyPlaylists() {
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
                       <CardTitle className="text-white group-hover:text-tabster-orange transition-colors">
-                        {playlist.name}
+                        {playlist.title}
                       </CardTitle>
                       {playlist.description && (
                         <CardDescription className="text-gray-400 mt-2">
@@ -168,16 +169,14 @@ export default function MyPlaylists() {
                         </CardDescription>
                       )}
                     </div>
-                    <Badge variant={playlist.isPublic ? "default" : "secondary"} className="ml-2">
-                      {playlist.isPublic ? "Public" : "Private"}
-                    </Badge>
+                    {/* Badge could be added here if needed */}
                   </div>
                 </CardHeader>
                 <CardContent>
                   <div className="flex items-center justify-between text-sm text-gray-400 mb-4">
                     <div className="flex items-center">
                       <Calendar className="h-4 w-4 mr-1" />
-                      {playlist.createdAt ? new Date(playlist.createdAt as string).toLocaleDateString() : 'Unknown'}
+                      {playlist.createdAt ? new Date(playlist.createdAt).toLocaleDateString() : 'Unknown'}
                     </div>
                     <div className="flex items-center">
                       <Music className="h-4 w-4 mr-1" />
@@ -206,7 +205,7 @@ export default function MyPlaylists() {
                         <AlertDialogHeader>
                           <AlertDialogTitle className="text-white">Delete Playlist</AlertDialogTitle>
                           <AlertDialogDescription className="text-gray-400">
-                            Are you sure you want to delete "{playlist.name}"? This action cannot be undone.
+                            Are you sure you want to delete "{playlist.title}"? This action cannot be undone.
                           </AlertDialogDescription>
                         </AlertDialogHeader>
                         <AlertDialogFooter>
