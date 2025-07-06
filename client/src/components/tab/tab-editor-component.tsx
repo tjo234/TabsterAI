@@ -109,15 +109,7 @@ Use standard guitar tablature notation:
       <div className="space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-4">
-            <Button 
-              variant="ghost" 
-              onClick={onCancel}
-              className="text-gray-400 hover:text-white"
-            >
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Back
-            </Button>
+          <div>
             <h2 className="text-3xl font-bold text-white">
               {isEditing ? 'Edit Tab' : 'Tab Editor'}
             </h2>
