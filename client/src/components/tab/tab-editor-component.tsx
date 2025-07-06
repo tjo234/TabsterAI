@@ -39,7 +39,6 @@ export default function TabEditorComponent({
     tuning: initialTab?.tuning || "E A D G B E",
     capo: initialTab?.capo || "",
     content: initialTab?.content || "",
-    isPublic: initialTab?.isPublic || false,
   });
 
   const [characterCount, setCharacterCount] = useState(0);
@@ -226,7 +225,7 @@ Use standard guitar tablature notation:
                     id="tuning"
                     type="text"
                     placeholder="E A D G B E"
-                    value={formData.tuning}
+                    value={formData.tuning || ""}
                     onChange={(e) => handleInputChange('tuning', e.target.value)}
                     className="bg-dark-tertiary border-dark-quaternary text-white placeholder-gray-500 focus:border-tabster-orange"
                   />
@@ -237,19 +236,14 @@ Use standard guitar tablature notation:
                     id="capo"
                     type="text"
                     placeholder="e.g., 2nd fret"
-                    value={formData.capo}
+                    value={formData.capo || ""}
                     onChange={(e) => handleInputChange('capo', e.target.value)}
                     className="bg-dark-tertiary border-dark-quaternary text-white placeholder-gray-500 focus:border-tabster-orange"
                   />
                 </div>
                 <div className="flex items-center space-x-2">
-                  <Switch
-                    id="isPublic"
-                    checked={formData.isPublic}
-                    onCheckedChange={(checked) => handleInputChange('isPublic', checked)}
-                  />
-                  <Label htmlFor="isPublic" className="text-gray-400 text-sm">
-                    Make public
+                  <Label className="text-gray-400 text-sm">
+                    All tabs are public
                   </Label>
                 </div>
               </div>

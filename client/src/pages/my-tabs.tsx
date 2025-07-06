@@ -208,9 +208,6 @@ export default function MyTabs() {
                         {tab.artist && `by ${tab.artist}`}
                       </CardDescription>
                     </div>
-                    <Badge variant={tab.isPublic ? "default" : "secondary"} className="ml-2">
-                      {tab.isPublic ? "Public" : "Private"}
-                    </Badge>
                   </div>
                 </CardHeader>
                 <CardContent>

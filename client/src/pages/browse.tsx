@@ -188,7 +188,7 @@ export default function Browse() {
                     <div className="flex items-center space-x-4">
                       <div className="flex items-center">
                         <Calendar className="h-4 w-4 mr-1" />
-                        {tab.createdAt ? new Date(tab.createdAt as string).toLocaleDateString() : 'Unknown'}
+                        {tab.createdAt ? new Date(tab.createdAt).toLocaleDateString() : 'Unknown'}
                       </div>
                     </div>
                     <Link href={`/tab/${tab.id}`}>

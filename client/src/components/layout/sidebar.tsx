@@ -40,10 +40,10 @@ export default function Sidebar() {
           </div>
         </div>
 
-        {/* My Library */}
+        {/* Library */}
         <div>
           <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wide mb-3">
-            My Library
+            Library
           </h3>
           <div className="space-y-1">
             <Link 

@@ -126,7 +126,6 @@ export class DatabaseStorage implements IStorage {
       .select()
       .from(tabs)
       .innerJoin(users, eq(tabs.userId, users.id))
-      .where(eq(tabs.isPublic, true))
       .orderBy(desc(tabs.updatedAt))
       .limit(50);
 
@@ -158,7 +157,7 @@ export class DatabaseStorage implements IStorage {
 
     const conditions = userId 
       ? and(searchCondition, eq(tabs.userId, userId))
-      : and(searchCondition, eq(tabs.isPublic, true));
+      : searchCondition;
 
     const results = await db
       .select()

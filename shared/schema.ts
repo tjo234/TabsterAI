@@ -46,7 +46,6 @@ export const tabs = pgTable("tabs", {
   tuning: varchar("tuning").default("E A D G B E"),
   capo: varchar("capo"),
   content: text("content").notNull(), // The actual tablature content
-  isPublic: boolean("is_public").default(false),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
