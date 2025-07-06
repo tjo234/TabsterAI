@@ -14,7 +14,7 @@ import type { TabWithUser, Playlist } from "@shared/schema";
 export default function TabViewer() {
   const [, params] = useRoute("/tab/:id");
   const [location, navigate] = useLocation();
-  const { toast } = useToast();
+  const { toastSuccess, toastError, toastUnauthorized } = useToast();
   const { isAuthenticated, isLoading: authLoading } = useAuth();
   const tabId = params?.id ? parseInt(params.id) : null;
 
@@ -121,11 +121,7 @@ export default function TabViewer() {
     },
     onSuccess: (data) => {
       console.log("Add to playlist success:", data);
-      toast({
-        title: "✓ Success",
-        description: "Tab added to playlist!",
-        className: "border-green-500/50 bg-green-950/80 text-green-50",
-      });
+      toastSuccess("Tab added to playlist!");
       queryClient.invalidateQueries({ queryKey: ["/api/playlists"] });
       queryClient.invalidateQueries({ queryKey: ["/api/playlist-items"] });
     },

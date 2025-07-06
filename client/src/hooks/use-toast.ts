@@ -168,6 +168,31 @@ function toast({ ...props }: Toast) {
   }
 }
 
+// Standardized toast utilities
+const toastSuccess = (description: string, title: string = "Success") => {
+  return toast({
+    title: `✓ ${title}`,
+    description,
+    className: "border-green-500/50 bg-green-950/80 text-green-50",
+  });
+};
+
+const toastError = (description: string, title: string = "Error") => {
+  return toast({
+    title: `✗ ${title}`,
+    description,
+    variant: "destructive",
+  });
+};
+
+const toastUnauthorized = () => {
+  return toast({
+    title: "✗ Unauthorized",
+    description: "You are logged out. Logging in again...",
+    variant: "destructive",
+  });
+};
+
 function useToast() {
   const [state, setState] = React.useState<State>(memoryState)
 
@@ -184,6 +209,9 @@ function useToast() {
   return {
     ...state,
     toast,
+    toastSuccess,
+    toastError,
+    toastUnauthorized,
     dismiss: (toastId?: string) => dispatch({ type: "DISMISS_TOAST", toastId }),
   }
 }

@@ -49,7 +49,7 @@ export default function MyPlaylists() {
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [newPlaylistName, setNewPlaylistName] = useState("");
   const [newPlaylistDescription, setNewPlaylistDescription] = useState("");
-  const { toast } = useToast();
+  const { toastSuccess, toastError, toastUnauthorized } = useToast();
 
   const { data: playlists = [], isLoading, error } = useQuery<Playlist[]>({
     queryKey: ["/api/playlists"],
@@ -89,28 +89,16 @@ export default function MyPlaylists() {
       setIsCreateDialogOpen(false);
       setNewPlaylistName("");
       setNewPlaylistDescription("");
-      toast({
-        title: "✓ Success",
-        description: "Playlist created successfully!",
-        className: "border-green-500/50 bg-green-950/80 text-green-50",
-      });
+      toastSuccess("Playlist created successfully!");
     },
     onError: (error) => {
-      toast({
-        title: "Error",
-        description: "Failed to create playlist. Please try again.",
-        variant: "destructive",
-      });
+      toastError("Failed to create playlist. Please try again.");
     },
   });
 
   const handleCreatePlaylist = () => {
     if (!newPlaylistName.trim()) {
-      toast({
-        title: "Error",
-        description: "Please enter a playlist name.",
-        variant: "destructive",
-      });
+      toastError("Please enter a playlist name.");
       return;
     }
     createMutation.mutate({
