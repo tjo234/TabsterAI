@@ -95,6 +95,12 @@ export default function TabViewerComponent({
     let lastIndex = 0;
 
     detectedChords.forEach((chordMatch, index) => {
+      // Debug chord positioning for C# issues
+      if (chordMatch.chord.includes('#')) {
+        console.log(`Chord: ${chordMatch.chord}, Position: ${chordMatch.position}, Length: ${chordMatch.chord.length}`);
+        console.log(`Content slice: "${content.slice(chordMatch.position, chordMatch.position + chordMatch.chord.length)}"`);
+      }
+      
       // Add text before chord
       if (chordMatch.position > lastIndex) {
         parts.push(
