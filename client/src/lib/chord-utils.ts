@@ -41,7 +41,7 @@ const CHORD_DIAGRAMS: { [key: string]: ChordDiagram } = {
   'Dm': { name: 'Dm', frets: ['x', 'x', '0', '2', '3', '1'], fingers: ['', '', '', '1', '3', '2'] },
   'D#m': { name: 'D#m', frets: ['x', 'x', '1', '3', '4', '2'], fingers: ['', '', '1', '3', '4', '2'] },
   'Em': { name: 'Em', frets: ['0', '2', '2', '0', '0', '0'], fingers: ['', '1', '2', '', '', ''] },
-  'Fm': { name: 'Fm', frets: ['1', '3', '3', '1', '1', '1'], fingers: ['1', '3', '4', '1', '1', '1'], barres: [{ fret: 1, fromString: 1, toString: 6 }] },
+  'Fm': { name: 'Fm', frets: ['1', '3', '3', '1', '1', '1'], fingers: ['1', '3', '4', '2', '1', '1'], barres: [{ fret: 1, fromString: 1, toString: 6 }] },
   'F#m': { name: 'F#m', frets: ['2', '4', '4', '2', '2', '2'], fingers: ['1', '3', '4', '1', '1', '1'], barres: [{ fret: 2, fromString: 1, toString: 6 }] },
   'Gm': { name: 'Gm', frets: ['3', '5', '5', '3', '3', '3'], fingers: ['1', '3', '4', '1', '1', '1'], barres: [{ fret: 3, fromString: 3, toString: 6 }] },
   'G#m': { name: 'G#m', frets: ['4', '6', '6', '4', '4', '4'], fingers: ['1', '3', '4', '1', '1', '1'], barres: [{ fret: 4, fromString: 1, toString: 6 }] },
