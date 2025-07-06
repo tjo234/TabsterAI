@@ -221,7 +221,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(403).json({ message: "Access denied" });
       }
 
-      const itemData = insertPlaylistItemSchema.parse({ ...req.body, playlistId });
+      // Get current playlist items to calculate order
+      const existingItems = await storage.getPlaylistItems(playlistId);
+      const order = existingItems.length;
+      
+      const itemData = insertPlaylistItemSchema.parse({ ...req.body, playlistId, order });
       const item = await storage.addTabToPlaylist(itemData);
       res.json(item);
     } catch (error) {
