@@ -128,6 +128,7 @@ Tabster is a full-stack web application for creating, managing, and sharing guit
 - **July 06, 2025** - Implemented complete "Add to Playlist" functionality with dialog selection, proper error handling, and success notifications. Added standardized toast utilities (toastSuccess, toastError, toastUnauthorized) for consistent messaging across all pages with green success styling and error handling.
 - **July 06, 2025** - Fixed favorite button race condition issues by preventing multiple concurrent mutations and adding proper loading state management. Updated all toast messages to use standardized utilities for consistent UI feedback.
 - **July 06, 2025** - Removed "Back to Dashboard" button from View Tab page for cleaner navigation. Simplified tablature section to show only the tab content without extra controls, headers, or stats for focused reading experience. Updated tab text styling to white color with larger font size for improved readability.
+- **July 06, 2025** - Added transpose controls with full chord transposition logic and hover chord diagrams. Implemented smart chord detection that only transposes chord symbols over lyrics while preserving tablature notation, string tuning (EADGBE), and fret numbers. Created comprehensive chord diagram library with finger positions.
 
 ## User Preferences
 

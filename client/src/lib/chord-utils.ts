@@ -47,12 +47,31 @@ export function detectChords(text: string): { chord: string; position: number }[
   const matches: { chord: string; position: number }[] = [];
   let match;
   
-  while ((match = chordPattern.exec(text)) !== null) {
-    matches.push({
-      chord: match[1],
-      position: match.index
-    });
-  }
+  // Split text into lines to analyze context
+  const lines = text.split('\n');
+  let currentPosition = 0;
+  
+  lines.forEach((line, lineIndex) => {
+    // Skip lines that look like tablature (contain multiple numbers and dashes)
+    const isTablatureLine = /^[a-gA-G]?\|?[-0-9xX\|]{10,}/.test(line.trim());
+    const isStringTuning = /^[EADGBE\s\|:]+$/.test(line.trim());
+    const isFretboardLine = /^[-\|]{5,}/.test(line.trim());
+    
+    if (!isTablatureLine && !isStringTuning && !isFretboardLine) {
+      // Only detect chords in lyrics/chord lines
+      let lineMatch;
+      const linePattern = /\b([A-G][#b]?(?:m|maj|min|dim|aug|sus[24]?|add[69]|[0-9]+)?)\b/g;
+      
+      while ((lineMatch = linePattern.exec(line)) !== null) {
+        matches.push({
+          chord: lineMatch[1],
+          position: currentPosition + lineMatch.index
+        });
+      }
+    }
+    
+    currentPosition += line.length + 1; // +1 for newline character
+  });
   
   return matches;
 }
@@ -89,11 +108,26 @@ export function transposeChord(chord: string, semitones: number): string {
 export function transposeText(text: string, semitones: number): string {
   if (semitones === 0) return text;
   
-  const chordPattern = /\b([A-G][#b]?(?:m|maj|min|dim|aug|sus[24]?|add[69]|[0-9]+)?)\b/g;
+  // Split text into lines and only transpose chord lines
+  const lines = text.split('\n');
   
-  return text.replace(chordPattern, (match) => {
-    return transposeChord(match, semitones);
-  });
+  return lines.map(line => {
+    // Skip lines that look like tablature (contain multiple numbers and dashes)
+    const isTablatureLine = /^[a-gA-G]?\|?[-0-9xX\|]{10,}/.test(line.trim());
+    const isStringTuning = /^[EADGBE\s\|:]+$/.test(line.trim());
+    const isFretboardLine = /^[-\|]{5,}/.test(line.trim());
+    
+    if (isTablatureLine || isStringTuning || isFretboardLine) {
+      // Don't transpose tablature lines, string tuning, or fretboard lines
+      return line;
+    }
+    
+    // Transpose chords in lyrics/chord lines only
+    const chordPattern = /\b([A-G][#b]?(?:m|maj|min|dim|aug|sus[24]?|add[69]|[0-9]+)?)\b/g;
+    return line.replace(chordPattern, (match) => {
+      return transposeChord(match, semitones);
+    });
+  }).join('\n');
 }
 
 // Get chord diagram for a chord
