@@ -218,7 +218,7 @@ export default function TabViewerComponent({
         {/* Tab Content */}
         <Card className="bg-dark-secondary border-dark-tertiary">
           <CardContent className="p-6">
-            <pre className="tab-text text-green-400 text-sm leading-relaxed whitespace-pre-wrap overflow-x-auto">
+            <pre className="tab-text text-white text-base leading-relaxed whitespace-pre-wrap overflow-x-auto">
               {tab.content}
             </pre>
           </CardContent>
