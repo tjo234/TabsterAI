@@ -1,0 +1,135 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: hsl(0, 0%, 100%);
+  --foreground: hsl(20, 14.3%, 4.1%);
+  --muted: hsl(60, 4.8%, 95.9%);
+  --muted-foreground: hsl(25, 5.3%, 44.7%);
+  --popover: hsl(0, 0%, 100%);
+  --popover-foreground: hsl(20, 14.3%, 4.1%);
+  --card: hsl(0, 0%, 100%);
+  --card-foreground: hsl(20, 14.3%, 4.1%);
+  --border: hsl(20, 5.9%, 90%);
+  --input: hsl(20, 5.9%, 90%);
+  --primary: hsl(207, 90%, 54%);
+  --primary-foreground: hsl(211, 100%, 99%);
+  --secondary: hsl(60, 4.8%, 95.9%);
+  --secondary-foreground: hsl(24, 9.8%, 10%);
+  --accent: hsl(60, 4.8%, 95.9%);
+  --accent-foreground: hsl(24, 9.8%, 10%);
+  --destructive: hsl(0, 84.2%, 60.2%);
+  --destructive-foreground: hsl(60, 9.1%, 97.8%);
+  --ring: hsl(20, 14.3%, 4.1%);
+  --radius: 0.5rem;
+
+  /* Tabster Custom Colors */
+  --tabster-orange: hsl(17, 100%, 60%);
+  --tabster-amber: hsl(35, 100%, 50%);
+  --dark-primary: hsl(0, 0%, 10.2%);
+  --dark-secondary: hsl(0, 0%, 16.5%);
+  --dark-tertiary: hsl(0, 0%, 22.7%);
+  --dark-quaternary: hsl(0, 0%, 29%);
+}
+
+.dark {
+  --background: hsl(0, 0%, 10.2%);
+  --foreground: hsl(0, 0%, 98%);
+  --muted: hsl(0, 0%, 16.5%);
+  --muted-foreground: hsl(0, 0%, 64.9%);
+  --popover: hsl(0, 0%, 10.2%);
+  --popover-foreground: hsl(0, 0%, 98%);
+  --card: hsl(0, 0%, 16.5%);
+  --card-foreground: hsl(0, 0%, 98%);
+  --border: hsl(0, 0%, 22.7%);
+  --input: hsl(0, 0%, 22.7%);
+  --primary: hsl(17, 100%, 60%);
+  --primary-foreground: hsl(211, 100%, 99%);
+  --secondary: hsl(0, 0%, 22.7%);
+  --secondary-foreground: hsl(0, 0%, 98%);
+  --accent: hsl(0, 0%, 22.7%);
+  --accent-foreground: hsl(0, 0%, 98%);
+  --destructive: hsl(0, 62.8%, 30.6%);
+  --destructive-foreground: hsl(0, 0%, 98%);
+  --ring: hsl(0, 0%, 83.9%);
+  --radius: 0.5rem;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply font-sans antialiased bg-dark-primary text-foreground;
+  }
+
+  html {
+    @apply dark;
+  }
+}
+
+@layer utilities {
+  .tab-text {
+    font-family: 'Courier New', monospace;
+    line-height: 1.2;
+    letter-spacing: 0.5px;
+  }
+
+  .guitar-pick {
+    clip-path: polygon(50% 0%, 100% 30%, 90% 100%, 10% 100%, 0% 30%);
+  }
+
+  .fretboard-line {
+    background: linear-gradient(90deg, transparent 0%, hsl(var(--dark-quaternary)) 20%, hsl(var(--dark-quaternary)) 80%, transparent 100%);
+  }
+
+  .draggable-item {
+    transition: all 0.2s ease;
+  }
+
+  .draggable-item:hover {
+    transform: translateY(-2px);
+  }
+
+  .bg-dark-primary {
+    background-color: hsl(var(--dark-primary));
+  }
+
+  .bg-dark-secondary {
+    background-color: hsl(var(--dark-secondary));
+  }
+
+  .bg-dark-tertiary {
+    background-color: hsl(var(--dark-tertiary));
+  }
+
+  .bg-dark-quaternary {
+    background-color: hsl(var(--dark-quaternary));
+  }
+
+  .border-dark-tertiary {
+    border-color: hsl(var(--dark-tertiary));
+  }
+
+  .border-dark-quaternary {
+    border-color: hsl(var(--dark-quaternary));
+  }
+
+  .text-tabster-orange {
+    color: hsl(var(--tabster-orange));
+  }
+
+  .bg-tabster-orange {
+    background-color: hsl(var(--tabster-orange));
+  }
+
+  .hover\:bg-tabster-orange:hover {
+    background-color: hsl(var(--tabster-orange));
+  }
+
+  .hover\:text-tabster-orange:hover {
+    color: hsl(var(--tabster-orange));
+  }
+}
