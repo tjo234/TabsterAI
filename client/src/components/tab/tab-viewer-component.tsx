@@ -217,71 +217,10 @@ export default function TabViewerComponent({
 
         {/* Tab Content */}
         <Card className="bg-dark-secondary border-dark-tertiary">
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <CardTitle className="text-lg font-semibold text-white">Tablature</CardTitle>
-              <div className="flex items-center space-x-2">
-                <Button 
-                  variant="outline"
-                  size="sm"
-                  className="bg-dark-tertiary hover:bg-dark-quaternary text-white border-dark-quaternary"
-                >
-                  <Play className="w-4 h-4 mr-1" />
-                  Play
-                </Button>
-                <Button 
-                  variant="outline"
-                  size="sm"
-                  className="bg-dark-tertiary hover:bg-dark-quaternary text-white border-dark-quaternary"
-                >
-                  Font Size
-                </Button>
-              </div>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="bg-dark-primary border border-dark-quaternary rounded-lg p-6">
-              <div className="mb-4">
-                <div className="flex items-center space-x-4 mb-2">
-                  <span className="text-gray-400 text-sm w-16">Tuning:</span>
-                  <span className="tab-text text-gray-300">{tab.tuning}</span>
-                  {tab.capo && (
-                    <>
-                      <span className="text-gray-400 text-sm">|</span>
-                      <span className="text-gray-400 text-sm">Capo:</span>
-                      <span className="tab-text text-gray-300">{tab.capo}</span>
-                    </>
-                  )}
-                </div>
-                <div className="h-px bg-dark-quaternary fretboard-line"></div>
-              </div>
-              
-              <pre className="tab-text text-green-400 text-sm leading-relaxed whitespace-pre-wrap overflow-x-auto">
-                {tab.content}
-              </pre>
-            </div>
-
-            {/* Tab Stats */}
-            <div className="flex items-center justify-between mt-4 pt-4 border-t border-dark-quaternary">
-              <div className="flex items-center space-x-6 text-sm text-gray-500">
-                <span>
-                  Characters: <span className="text-white">{tab.content.length}</span>
-                </span>
-                <span>
-                  Lines: <span className="text-white">{tab.content.split('\n').length}</span>
-                </span>
-                <span>
-                  <Badge variant="outline" className="bg-green-500/20 text-green-400 border-green-500/30">
-                    Public
-                  </Badge>
-                </span>
-              </div>
-              {tab.updatedAt && tab.updatedAt !== tab.createdAt && (
-                <div className="text-gray-500 text-sm">
-                  Last updated: {formatDate(tab.updatedAt)}
-                </div>
-              )}
-            </div>
+          <CardContent className="p-6">
+            <pre className="tab-text text-green-400 text-sm leading-relaxed whitespace-pre-wrap overflow-x-auto">
+              {tab.content}
+            </pre>
           </CardContent>
         </Card>
       </div>
