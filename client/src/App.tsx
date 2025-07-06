@@ -10,6 +10,7 @@ import Home from "@/pages/home";
 import TabEditor from "@/pages/tab-editor";
 import TabViewer from "@/pages/tab-viewer";
 import PlaylistManager from "@/pages/playlist-manager";
+import Browse from "@/pages/browse";
 
 function Router() {
   const { isAuthenticated, isLoading } = useAuth();
@@ -25,6 +26,7 @@ function Router() {
           <Route path="/tab/:id/edit" component={TabEditor} />
           <Route path="/tab/:id" component={TabViewer} />
           <Route path="/playlist/:id" component={PlaylistManager} />
+          <Route path="/browse/:category" component={Browse} />
         </>
       )}
       <Route component={NotFound} />

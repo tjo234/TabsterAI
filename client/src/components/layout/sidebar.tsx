@@ -50,37 +50,41 @@ export default function Sidebar() {
             Browse
           </h3>
           <div className="space-y-1">
-            <Link href="/browse/popular">
-              <a className={`block px-3 py-2 text-gray-300 hover:text-tabster-orange hover:bg-dark-tertiary rounded transition-colors ${
+            <Link 
+              href="/browse/popular"
+              className={`block px-3 py-2 text-gray-300 hover:text-tabster-orange hover:bg-dark-tertiary rounded transition-colors ${
                 isActive('/browse/popular') ? 'text-tabster-orange bg-dark-tertiary' : ''
-              }`}>
-                <Flame className="inline mr-3 h-4 w-4" />
-                Popular
-              </a>
+              }`}
+            >
+              <Flame className="inline mr-3 h-4 w-4" />
+              Popular
             </Link>
-            <Link href="/browse/recent">
-              <a className={`block px-3 py-2 text-gray-300 hover:text-tabster-orange hover:bg-dark-tertiary rounded transition-colors ${
+            <Link 
+              href="/browse/recent"
+              className={`block px-3 py-2 text-gray-300 hover:text-tabster-orange hover:bg-dark-tertiary rounded transition-colors ${
                 isActive('/browse/recent') ? 'text-tabster-orange bg-dark-tertiary' : ''
-              }`}>
-                <Clock className="inline mr-3 h-4 w-4" />
-                Recent
-              </a>
+              }`}
+            >
+              <Clock className="inline mr-3 h-4 w-4" />
+              Recent
             </Link>
-            <Link href="/browse/top-rated">
-              <a className={`block px-3 py-2 text-gray-300 hover:text-tabster-orange hover:bg-dark-tertiary rounded transition-colors ${
+            <Link 
+              href="/browse/top-rated"
+              className={`block px-3 py-2 text-gray-300 hover:text-tabster-orange hover:bg-dark-tertiary rounded transition-colors ${
                 isActive('/browse/top-rated') ? 'text-tabster-orange bg-dark-tertiary' : ''
-              }`}>
-                <Star className="inline mr-3 h-4 w-4" />
-                Top Rated
-              </a>
+              }`}
+            >
+              <Star className="inline mr-3 h-4 w-4" />
+              Top Rated
             </Link>
-            <Link href="/browse/discover">
-              <a className={`block px-3 py-2 text-gray-300 hover:text-tabster-orange hover:bg-dark-tertiary rounded transition-colors ${
+            <Link 
+              href="/browse/discover"
+              className={`block px-3 py-2 text-gray-300 hover:text-tabster-orange hover:bg-dark-tertiary rounded transition-colors ${
                 isActive('/browse/discover') ? 'text-tabster-orange bg-dark-tertiary' : ''
-              }`}>
-                <Shuffle className="inline mr-3 h-4 w-4" />
-                Discover
-              </a>
+              }`}
+            >
+              <Shuffle className="inline mr-3 h-4 w-4" />
+              Discover
             </Link>
           </div>
         </div>
@@ -91,29 +95,32 @@ export default function Sidebar() {
             My Library
           </h3>
           <div className="space-y-1">
-            <Link href="/favorites">
-              <a className={`block px-3 py-2 text-gray-300 hover:text-tabster-orange hover:bg-dark-tertiary rounded transition-colors ${
+            <Link 
+              href="/favorites"
+              className={`block px-3 py-2 text-gray-300 hover:text-tabster-orange hover:bg-dark-tertiary rounded transition-colors ${
                 isActive('/favorites') ? 'text-tabster-orange bg-dark-tertiary' : ''
-              }`}>
-                <Heart className="inline mr-3 h-4 w-4" />
-                Favorites
-              </a>
+              }`}
+            >
+              <Heart className="inline mr-3 h-4 w-4" />
+              Favorites
             </Link>
-            <Link href="/tabs">
-              <a className={`block px-3 py-2 text-gray-300 hover:text-tabster-orange hover:bg-dark-tertiary rounded transition-colors ${
+            <Link 
+              href="/tabs"
+              className={`block px-3 py-2 text-gray-300 hover:text-tabster-orange hover:bg-dark-tertiary rounded transition-colors ${
                 isActive('/tabs') ? 'text-tabster-orange bg-dark-tertiary' : ''
-              }`}>
-                <Folder className="inline mr-3 h-4 w-4" />
-                My Tabs
-              </a>
+              }`}
+            >
+              <Folder className="inline mr-3 h-4 w-4" />
+              My Tabs
             </Link>
-            <Link href="/playlists">
-              <a className={`block px-3 py-2 text-gray-300 hover:text-tabster-orange hover:bg-dark-tertiary rounded transition-colors ${
+            <Link 
+              href="/playlists"
+              className={`block px-3 py-2 text-gray-300 hover:text-tabster-orange hover:bg-dark-tertiary rounded transition-colors ${
                 isActive('/playlists') ? 'text-tabster-orange bg-dark-tertiary' : ''
-              }`}>
-                <ListMusic className="inline mr-3 h-4 w-4" />
-                Playlists
-              </a>
+              }`}
+            >
+              <ListMusic className="inline mr-3 h-4 w-4" />
+              Playlists
             </Link>
           </div>
         </div>
