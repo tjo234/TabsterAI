@@ -57,7 +57,11 @@ export default function TabViewerComponent({
 
   // Compute transposed content
   const transposedContent = useMemo(() => {
-    return transposeText(tab.content, transposeSteps);
+    const transposed = transposeText(tab.content, transposeSteps);
+    if (transposeSteps !== 0) {
+      console.log('Transposed content sample:', transposed.substring(0, 200));
+    }
+    return transposed;
   }, [tab.content, transposeSteps]);
 
   // Detect chords in the content for hover functionality

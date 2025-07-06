@@ -94,6 +94,10 @@ export function detectChords(text: string): { chord: string; position: number }[
       const linePattern = new RegExp(CHORD_PATTERN.source, 'g');
       
       while ((lineMatch = linePattern.exec(line)) !== null) {
+        // Debug log to see what's being captured
+        if (lineMatch[1].includes('#') || lineMatch[1].includes('b')) {
+          console.log(`Detected sharp/flat chord: "${lineMatch[1]}" from line: "${line}"`);
+        }
         matches.push({
           chord: lineMatch[1],
           position: currentPosition + lineMatch.index
