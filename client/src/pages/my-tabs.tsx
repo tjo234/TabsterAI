@@ -28,6 +28,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Link } from "wouter";
 import { useToast } from "@/hooks/use-toast";
+import Header from "@/components/layout/header";
 import { queryClient, apiRequest } from "@/lib/queryClient";
 import type { Tab } from "@shared/schema";
 
@@ -98,6 +99,7 @@ export default function MyTabs() {
 
   return (
     <div className="min-h-screen bg-dark-primary">
+      <Header />
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">

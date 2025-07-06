@@ -123,6 +123,7 @@ Tabster is a full-stack web application for creating, managing, and sharing guit
 - **July 06, 2025** - Removed private vs public tabs concept - all tabs are now public and shareable. Updated database schema, UI components, and storage layer accordingly. Added 12 sample guitar tabs with realistic content for testing and demonstration.
 - **July 06, 2025** - Removed "Browse" link from header navigation for cleaner UI. Users can browse tabs through dashboard sections (Popular, Recent, Top Rated).
 - **July 06, 2025** - Removed sidebar navigation completely. Application now uses full-width layout with header-only navigation for cleaner, more modern interface.
+- **July 06, 2025** - Added header navigation to My Tabs and My Playlists pages for consistent navigation across all pages.
 
 ## User Preferences
 
